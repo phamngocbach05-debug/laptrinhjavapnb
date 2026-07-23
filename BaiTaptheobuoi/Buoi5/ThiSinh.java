@@ -1,5 +1,4 @@
-// Lop cha ThiSinh - tuong duong HoaQua.java cua Duc Hiep
-// Day la lop co so chua thong tin chung cua thi sinh
+// Lop cha ThiSinh - Chua thong tin chung cua thi sinh
 public class ThiSinh {
     protected String maSoBD;
     protected String hoTen;

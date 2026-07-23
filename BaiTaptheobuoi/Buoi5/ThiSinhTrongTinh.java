@@ -1,5 +1,4 @@
-// Lop ThiSinhTrongTinh - tuong duong HoaQuaDiaPhuong.java cua Duc Hiep
-// Ke thua ThiSinh, bo sung thuoc tinh dac thu thi sinh trong tinh
+// Lop ThiSinhTrongTinh - Ke thua ThiSinh, bo sung thuoc tinh thi sinh trong tinh
 public class ThiSinhTrongTinh extends ThiSinh {
     private String tinh;          // Ten tinh/thanh pho
     private boolean uuTien;       // Co duoc uu tien khu vuc khong

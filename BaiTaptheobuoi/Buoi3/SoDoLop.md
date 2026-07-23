@@ -4,11 +4,11 @@
 
 Hệ thống quản lý tuyển sinh xoay quanh 3 đối tượng cốt lõi:
 
-| Lớp | Tương đương | Vai trò |
-|-----|-------------|---------|
-| `Thisinh` | Customer | Thông tin thí sinh dự tuyển |
-| `NganhHoc` | Fruit | Thông tin ngành học & chỉ tiêu |
-| `DonDangKy` | Order | Đơn đăng ký xét tuyển |
+| Lớp | Vai trò |
+|-----|---------|
+| `Thisinh` | Thông tin thí sinh dự tuyển |
+| `NganhHoc` | Thông tin ngành học & chỉ tiêu |
+| `DonDangKy` | Đơn đăng ký xét tuyển |
 
 ---
 

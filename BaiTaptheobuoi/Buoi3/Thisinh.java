@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
-// Lop Thisinh - tuong duong Customer.java cua Duc Hiep
-// Quan ly thong tin thi sinh du tuyen
+// Lop Thisinh - Quan ly thong tin thi sinh du tuyen
 public class Thisinh {
     private String maSoBD;
     private String hoTen;

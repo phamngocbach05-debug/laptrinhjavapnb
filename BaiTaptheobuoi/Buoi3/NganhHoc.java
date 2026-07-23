@@ -1,5 +1,4 @@
-// Lop NganhHoc - tuong duong Fruit.java cua Duc Hiep
-// Quan ly thong tin nganh hoc trong ky tuyen sinh
+// Lop NganhHoc - Quan ly thong tin nganh hoc trong ky tuyen sinh
 public class NganhHoc {
     private String maNganh;
     private String tenNganh;

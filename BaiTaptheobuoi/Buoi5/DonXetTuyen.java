@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
-// Lop DonXetTuyen - tuong duong DonHang.java cua Duc Hiep
-// Quan ly don xet tuyen va ket qua tuyen sinh
+// Lop DonXetTuyen - Quan ly don xet tuyen va ket qua tuyen sinh
 // Implements ITuyenSinh de quan ly toan bo danh sach
 public class DonXetTuyen implements ITuyenSinh {
 

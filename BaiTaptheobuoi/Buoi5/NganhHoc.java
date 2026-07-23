@@ -1,5 +1,4 @@
-// Lop NganhHoc - tuong duong KhachHang.java cua Duc Hiep
-// Quan ly thong tin nganh hoc va chi tieu tuyen sinh
+// Lop NganhHoc - Quan ly thong tin nganh hoc va chi tieu tuyen sinh
 public class NganhHoc {
     private String maNganh;
     private String tenNganh;

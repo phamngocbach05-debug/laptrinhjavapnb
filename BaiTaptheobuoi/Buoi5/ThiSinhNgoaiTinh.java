@@ -1,5 +1,4 @@
-// Lop ThiSinhNgoaiTinh - tuong duong HoaQuaXuatKhau.java cua Duc Hiep
-// Ke thua ThiSinh, bo sung thuoc tinh dac thu thi sinh ngoai tinh
+// Lop ThiSinhNgoaiTinh - Ke thua ThiSinh, bo sung thuoc tinh thi sinh ngoai tinh
 public class ThiSinhNgoaiTinh extends ThiSinh {
     private String tinhNguon;     // Tinh que quan
     private String khuVuc;        // KV1 / KV2 / KV2-NT / KV3

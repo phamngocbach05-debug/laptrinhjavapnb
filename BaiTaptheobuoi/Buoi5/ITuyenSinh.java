@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
-// Interface ITuyenSinh - tuong duong INhapXuat.java cua Duc Hiep
-// Dinh nghia cac phep toan co ban tren danh sach thi sinh
+// Interface ITuyenSinh - Dinh nghia cac phep toan co ban tren danh sach thi sinh
 public interface ITuyenSinh {
     // Them thi sinh vao he thong
     boolean themThiSinh(ThiSinh ts);

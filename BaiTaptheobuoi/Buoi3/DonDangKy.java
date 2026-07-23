@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
-// Lop DonDangKy - tuong duong Order.java cua Duc Hiep
-// Quan ly don dang ky tuyen sinh cua mot thi sinh
+// Lop DonDangKy - Quan ly don dang ky tuyen sinh cua mot thi sinh
 public class DonDangKy {
     private String maDon;
     private Thisinh thisinh;
