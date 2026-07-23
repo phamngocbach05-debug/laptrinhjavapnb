@@ -4,11 +4,11 @@ import java.util.ArrayList;
 // Implements ITuyenSinh de quan ly toan bo danh sach
 public class DonXetTuyen implements ITuyenSinh {
 
-    private String   maDon;
-    private ThiSinh  thiSinh;
-    private NganhHoc nganhHoc;
-    private String   ngayNop;
-    private String   trangThai;   // "Cho duyet" / "Trung tuyen" / "Truot"
+    private String      maDon;
+    private ThiSinh     thiSinh;
+    private NganhHocTS  nganhHoc;
+    private String      ngayNop;
+    private String      trangThai;   // "Cho duyet" / "Trung tuyen" / "Truot"
 
     // Danh sach toan he thong (static - dung chung)
     private static ArrayList<ThiSinh> danhSachChung = new ArrayList<>();
@@ -17,7 +17,7 @@ public class DonXetTuyen implements ITuyenSinh {
     public DonXetTuyen() {}
 
     public DonXetTuyen(String maDon, ThiSinh thiSinh,
-                       NganhHoc nganhHoc, String ngayNop) {
+                       NganhHocTS nganhHoc, String ngayNop) {
         this.maDon     = maDon;
         this.thiSinh   = thiSinh;
         this.nganhHoc  = nganhHoc;
@@ -26,16 +26,16 @@ public class DonXetTuyen implements ITuyenSinh {
     }
 
     // ---- Getters / Setters ----
-    public String   getMaDon()     { return maDon; }
-    public ThiSinh  getThiSinh()   { return thiSinh; }
-    public NganhHoc getNganhHoc()  { return nganhHoc; }
-    public String   getNgayNop()   { return ngayNop; }
-    public String   getTrangThai() { return trangThai; }
+    public String     getMaDon()    { return maDon; }
+    public ThiSinh    getThiSinh()  { return thiSinh; }
+    public NganhHocTS getNganhHoc() { return nganhHoc; }
+    public String     getNgayNop()  { return ngayNop; }
+    public String     getTrangThai(){ return trangThai; }
 
-    public void setMaDon(String maDon)         { this.maDon = maDon; }
-    public void setThiSinh(ThiSinh thiSinh)    { this.thiSinh = thiSinh; }
-    public void setNganhHoc(NganhHoc nganhHoc) { this.nganhHoc = nganhHoc; }
-    public void setNgayNop(String ngayNop)     { this.ngayNop = ngayNop; }
+    public void setMaDon(String maDon)            { this.maDon = maDon; }
+    public void setThiSinh(ThiSinh thiSinh)       { this.thiSinh = thiSinh; }
+    public void setNganhHoc(NganhHocTS nganhHoc)  { this.nganhHoc = nganhHoc; }
+    public void setNgayNop(String ngayNop)        { this.ngayNop = ngayNop; }
 
     // ---- Logic xet tuyen ----
     public void xetTuyen() {
@@ -96,15 +96,15 @@ public class DonXetTuyen implements ITuyenSinh {
 
     // ---- Main demo ----
     public static void main(String[] args) {
-        NganhHoc ttnt = new NganhHoc("TTNT", "Tri tue nhan tao", 100, 28.5, "A00");
-        NganhHoc ck   = new NganhHoc("CK",   "Co khi",           120, 26.0, "A01");
+        NganhHocTS ttnt = new NganhHocTS("TTNT", "Tri tue nhan tao", 100, 28.5, "A00");
+        NganhHocTS ck   = new NganhHocTS("CK",   "Co khi",           120, 26.0, "A01");
 
         ThiSinhTrongTinh ts1 = new ThiSinhTrongTinh(
-                "TS001","Pham Ngoc Bach","Nam", 28.5,"TTNT","Ha Noi", true);
+                "TS001", "Pham Ngoc Bach", "Nam", 28.5, "TTNT", "Ha Noi", true);
         ThiSinhNgoaiTinh ts2 = new ThiSinhNgoaiTinh(
-                "TS002","Nguyen Thi A","Nu", 27.0,"CK","Nghe An","KV1", 15000000);
+                "TS002", "Nguyen Thi A", "Nu", 27.0, "CK", "Nghe An", "KV1", 15000000);
         ThiSinh ts3 = new ThiSinh(
-                "TS003","Le Van B","Nam", 25.0,"CK");
+                "TS003", "Le Van B", "Nam", 25.0, "CK");
 
         ArrayList<DonXetTuyen> dsDon = new ArrayList<>();
         dsDon.add(new DonXetTuyen("DDK001", ts1, ttnt, "2026-07-01"));
@@ -119,11 +119,7 @@ public class DonXetTuyen implements ITuyenSinh {
 
         System.out.println("\n===== THI SINH CO DIEM >= 27 =====");
         DonXetTuyen ql = new DonXetTuyen();
-        ql.themThiSinh(ts1);
-        ql.themThiSinh(ts2);
-        ql.themThiSinh(ts3);
-        for (ThiSinh ts : ql.locTheoNguong(27.0)) {
-            System.out.println(ts);
-        }
+        ql.themThiSinh(ts1); ql.themThiSinh(ts2); ql.themThiSinh(ts3);
+        for (ThiSinh ts : ql.locTheoNguong(27.0)) System.out.println(ts);
     }
 }

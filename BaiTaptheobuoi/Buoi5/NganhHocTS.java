@@ -1,20 +1,20 @@
-// Lop NganhHoc - Quan ly thong tin nganh hoc va chi tieu tuyen sinh
-public class NganhHoc {
+// Lop NganhHocTS - Quan ly thong tin nganh hoc va chi tieu tuyen sinh (Buoi5)
+public class NganhHocTS {
     private String maNganh;
     private String tenNganh;
     private int    chiTieu;
     private double diemChuan;
     private String toHop;       // To hop mon xet tuyen (vd: A00, A01, D01)
 
-    public NganhHoc() {}
+    public NganhHocTS() {}
 
-    public NganhHoc(String maNganh, String tenNganh,
-                    int chiTieu, double diemChuan, String toHop) {
-        this.maNganh  = maNganh;
-        this.tenNganh = tenNganh;
-        this.chiTieu  = chiTieu;
+    public NganhHocTS(String maNganh, String tenNganh,
+                      int chiTieu, double diemChuan, String toHop) {
+        this.maNganh   = maNganh;
+        this.tenNganh  = tenNganh;
+        this.chiTieu   = chiTieu;
         this.diemChuan = diemChuan;
-        this.toHop    = toHop;
+        this.toHop     = toHop;
     }
 
     public String getMaNganh()   { return maNganh; }
@@ -36,14 +36,14 @@ public class NganhHoc {
     }
 
     public static void main(String[] args) {
-        NganhHoc[] ds = {
-            new NganhHoc("TTNT", "Tri tue nhan tao",   100, 28.5, "A00"),
-            new NganhHoc("CK",   "Co khi",              120, 26.0, "A01"),
-            new NganhHoc("CTT",  "Cong trinh thuy",      80, 25.5, "A00"),
-            new NganhHoc("CNTT", "Cong nghe thong tin", 150, 27.5, "A01"),
+        NganhHocTS[] ds = {
+            new NganhHocTS("TTNT", "Tri tue nhan tao",   100, 28.5, "A00"),
+            new NganhHocTS("CK",   "Co khi",              120, 26.0, "A01"),
+            new NganhHocTS("CTT",  "Cong trinh thuy",      80, 25.5, "A00"),
+            new NganhHocTS("CNTT", "Cong nghe thong tin", 150, 27.5, "A01"),
         };
 
         System.out.println("===== DANH SACH NGANH HOC =====");
-        for (NganhHoc n : ds) System.out.println(n);
+        for (NganhHocTS n : ds) System.out.println(n);
     }
 }

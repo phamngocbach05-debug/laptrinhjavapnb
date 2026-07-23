@@ -8,7 +8,7 @@ public class Thisinh {
     private String nganhDangKy;
     private double tongDiem;
 
-    // Constructor mac dinh
+    // Constructor mac dinh co dinh
     public Thisinh() {
     }
 
