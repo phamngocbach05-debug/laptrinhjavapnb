@@ -36,14 +36,12 @@ public class GUI_insertTS extends JFrame {
         getContentPane().setBackground(new Color(245, 248, 255));
         setLayout(new BorderLayout(10, 10));
 
-        // ========== PANEL NHAP LIEU (TREN) ==========
+        // ========== PANEL NHAP LIEU ==========
         JPanel pnlInput = new JPanel(new GridBagLayout());
         pnlInput.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(66, 133, 244), 2),
-                "Thong tin Thi sinh",
-                0, 0,
-                new Font("Arial", Font.BOLD, 14),
-                new Color(66, 133, 244)));
+                "Thong tin Thi sinh", 0, 0,
+                new Font("Arial", Font.BOLD, 14), new Color(66, 133, 244)));
         pnlInput.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -56,35 +54,33 @@ public class GUI_insertTS extends JFrame {
         // So bao danh
         gbc.gridx = 0; gbc.gridy = 0;
         pnlInput.add(makeLabel("So bao danh:", labelFont), gbc);
-        gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.gridx = 1; gbc.gridwidth = 2;
         txtSoBD = makeTextField(fieldFont);
         pnlInput.add(txtSoBD, gbc);
 
         // Ho ten
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1;
         pnlInput.add(makeLabel("Ho ten:", labelFont), gbc);
-        gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 2;
+        gbc.gridx = 1; gbc.gridwidth = 2;
         txtHoten = makeTextField(fieldFont);
         pnlInput.add(txtHoten, gbc);
 
         // Gioi tinh
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1;
         pnlInput.add(makeLabel("Gioi tinh:", labelFont), gbc);
-        gbc.gridx = 1; gbc.gridy = 2;
         rdoNam = new JRadioButton("Nam"); rdoNam.setFont(fieldFont); rdoNam.setSelected(true); rdoNam.setBackground(Color.WHITE);
         rdoNu  = new JRadioButton("Nu");  rdoNu.setFont(fieldFont);  rdoNu.setBackground(Color.WHITE);
         groupGT = new ButtonGroup();
-        groupGT.add(rdoNam);
-        groupGT.add(rdoNu);
+        groupGT.add(rdoNam); groupGT.add(rdoNu);
         JPanel pnlGT = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         pnlGT.setBackground(Color.WHITE);
         pnlGT.add(rdoNam); pnlGT.add(rdoNu);
-        pnlInput.add(pnlGT, gbc);
+        gbc.gridx = 1; pnlInput.add(pnlGT, gbc);
 
         // Nganh hoc
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 1;
         pnlInput.add(makeLabel("Nganh hoc:", labelFont), gbc);
-        gbc.gridx = 1; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.gridx = 1; gbc.gridwidth = 2;
         cboNganhH = new JComboBox<>(new String[]{
             "Tri tue nhan tao", "Co khi", "Cong trinh thuy"
         });
@@ -95,23 +91,19 @@ public class GUI_insertTS extends JFrame {
         // Tong diem
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 1;
         pnlInput.add(makeLabel("Tong diem:", labelFont), gbc);
-        gbc.gridx = 1; gbc.gridy = 4; gbc.gridwidth = 2;
+        gbc.gridx = 1; gbc.gridwidth = 2;
         txtTongD = makeTextField(fieldFont);
         pnlInput.add(txtTongD, gbc);
 
         // ========== PANEL BUTTONS ==========
         JPanel pnlBtn = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 8));
         pnlBtn.setBackground(Color.WHITE);
+        btnThem    = makeButton("Them thi sinh moi", new Color(66, 133, 244));
+        btnTimKiem = makeButton("Tim kiem",           new Color(52, 168, 83));
+        btnXoa     = makeButton("Xoa dong chon",      new Color(234, 67, 53));
+        pnlBtn.add(btnThem); pnlBtn.add(btnTimKiem); pnlBtn.add(btnXoa);
 
-        btnThem     = makeButton("Them thi sinh moi", new Color(66, 133, 244));
-        btnTimKiem  = makeButton("Tim kiem",           new Color(52, 168, 83));
-        btnXoa      = makeButton("Xoa dong chon",      new Color(234, 67, 53));
-
-        pnlBtn.add(btnThem);
-        pnlBtn.add(btnTimKiem);
-        pnlBtn.add(btnXoa);
-
-        // ========== PANEL TABLE (DUOI) ==========
+        // ========== TABLE ==========
         String[] cols = {"So BD", "Ho ten", "Gioi tinh", "Nganh hoc", "Tong diem", "Hoc bong"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -128,21 +120,18 @@ public class GUI_insertTS extends JFrame {
                 BorderFactory.createLineBorder(new Color(66, 133, 244), 1),
                 "Danh sach Thi sinh"));
 
-        // ========== LAYOUT TONG HOP ==========
+        // ========== LAYOUT ==========
         JPanel pnlTop = new JPanel(new BorderLayout());
         pnlTop.add(pnlInput, BorderLayout.CENTER);
         pnlTop.add(pnlBtn,   BorderLayout.SOUTH);
         pnlTop.setBorder(BorderFactory.createEmptyBorder(8, 8, 0, 8));
-
-        add(pnlTop,  BorderLayout.NORTH);
-        add(scroll,  BorderLayout.CENTER);
+        add(pnlTop, BorderLayout.NORTH);
+        add(scroll, BorderLayout.CENTER);
 
         // ========== EVENTS ==========
-        btnThem.addActionListener((ActionEvent e) -> themThiSinh());
-        btnXoa.addActionListener((ActionEvent e) -> xoaDong());
+        btnThem.addActionListener((ActionEvent e)    -> themThiSinh());
+        btnXoa.addActionListener((ActionEvent e)     -> xoaDong());
         btnTimKiem.addActionListener((ActionEvent e) -> timKiem());
-
-        // Click vao hang de dien vao form
         table.getSelectionModel().addListSelectionListener(ev -> {
             if (!ev.getValueIsAdjusting()) fillForm();
         });
@@ -151,8 +140,7 @@ public class GUI_insertTS extends JFrame {
     // ---- Load toan bo danh sach vao JTable ----
     private void loadTable() {
         tableModel.setRowCount(0);
-        ArrayList<Thisinh> ds = xlts.getTS();
-        for (Thisinh ts : ds) {
+        for (Thisinh ts : xlts.getTS()) {
             tableModel.addRow(new Object[]{
                 ts.getSoBD(), ts.getHoten(), ts.getGT(),
                 ts.getNganhH(), ts.getTongD(), ts.Hocbong()
@@ -160,7 +148,7 @@ public class GUI_insertTS extends JFrame {
         }
     }
 
-    // ---- Them thi sinh moi ----
+    // ---- Them thi sinh moi (co xu ly Exception) ----
     private void themThiSinh() {
         String soBD  = txtSoBD.getText().trim();
         String hoten = txtHoten.getText().trim();
@@ -168,27 +156,45 @@ public class GUI_insertTS extends JFrame {
         String nganh = (String) cboNganhH.getSelectedItem();
         String tongDStr = txtTongD.getText().trim();
 
+        // Kiem tra truong trong
         if (soBD.isEmpty() || hoten.isEmpty() || tongDStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui long nhap day du thong tin!", "Loi", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        double tongD;
-        try {
-            tongD = Double.parseDouble(tongDStr);
-            if (tongD < 0 || tongD > 30) throw new NumberFormatException();
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Tong diem khong hop le (0 - 30)!", "Loi", JOptionPane.ERROR_MESSAGE);
+            showError("Vui long nhap day du thong tin!", "Thieu thong tin");
             return;
         }
 
-        Thisinh ts = new Thisinh(soBD, hoten, gt, nganh, tongD);
-        boolean ok = xlts.insertTS(ts);
-        if (ok) {
+        // Parse diem - bat NumberFormatException
+        double tongD;
+        try {
+            tongD = Double.parseDouble(tongDStr);
+        } catch (NumberFormatException e) {
+            showError("Tong diem phai la so! (Vi du: 27.5)", "Dinh dang sai");
+            txtTongD.requestFocus();
+            return;
+        }
+
+        // Them vao he thong - bat TuyenSinhException
+        try {
+            Thisinh ts = new Thisinh(soBD, hoten, gt, nganh, tongD);
+            xlts.insertTS(ts);
             loadTable();
             clearForm();
-            JOptionPane.showMessageDialog(this, "Them thi sinh thanh cong!", "Thong bao", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "So bao danh da ton tai!", "Loi", JOptionPane.WARNING_MESSAGE);
+            showSuccess("Them thi sinh [" + soBD + "] thanh cong!");
+
+        } catch (DiemKhongHopLeException e) {
+            // Diem ngoai khoang 0-30
+            showError(e.getMessage(), "Diem khong hop le");
+            txtTongD.requestFocus();
+            txtTongD.selectAll();
+
+        } catch (SoBDDaTonTaiException e) {
+            // So bao danh trung
+            showError(e.getMessage(), "So bao danh trung");
+            txtSoBD.requestFocus();
+            txtSoBD.selectAll();
+
+        } catch (Exception e) {
+            // Bat tat ca cac loi khac khong luong truoc
+            showError("Loi khong xac dinh: " + e.getMessage(), "Loi he thong");
         }
     }
 
@@ -196,28 +202,30 @@ public class GUI_insertTS extends JFrame {
     private void xoaDong() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Vui long chon dong can xoa!", "Thong bao", JOptionPane.WARNING_MESSAGE);
+            showError("Vui long chon dong can xoa!", "Chua chon dong");
             return;
         }
-        int confirm = JOptionPane.showConfirmDialog(this, "Ban co chac muon xoa dong nay?", "Xac nhan", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Ban co chac muon xoa thi sinh nay?", "Xac nhan xoa",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (confirm == JOptionPane.YES_OPTION) {
-            xlts.getTS().remove(row);
+            xlts.xoaThiSinh(row);
             loadTable();
             clearForm();
         }
     }
 
-    // ---- Tim kiem theo so bao danh ----
+    // ---- Tim kiem theo So Bao Danh (co xu ly ThiSinhKhongTonTaiException) ----
     private void timKiem() {
         String soBD = txtSoBD.getText().trim();
         if (soBD.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nhap So bao danh de tim kiem!", "Thong bao", JOptionPane.WARNING_MESSAGE);
+            showError("Nhap So Bao Danh de tim kiem!", "Thieu thong tin");
             return;
         }
-        Thisinh ts = xlts.timKiem(soBD);
-        if (ts == null) {
-            JOptionPane.showMessageDialog(this, "Khong tim thay thi sinh co So BD: " + soBD, "Ket qua", JOptionPane.INFORMATION_MESSAGE);
-        } else {
+
+        try {
+            Thisinh ts = xlts.timKiem(soBD);
+
             // Highlight dong tim duoc
             ArrayList<Thisinh> ds = xlts.getTS();
             for (int i = 0; i < ds.size(); i++) {
@@ -227,6 +235,11 @@ public class GUI_insertTS extends JFrame {
                     break;
                 }
             }
+            showSuccess("Tim thay: " + ts.getHoten() + " | Diem: " + ts.getTongD());
+
+        } catch (ThiSinhKhongTonTaiException e) {
+            // Khong tim thay
+            showError(e.getMessage(), "Khong tim thay");
         }
     }
 
@@ -248,7 +261,16 @@ public class GUI_insertTS extends JFrame {
         cboNganhH.setSelectedIndex(0);
     }
 
-    // ---- Utility helpers ----
+    // ---- Helper: hien thi dialog loi / thanh cong ----
+    private void showError(String msg, String title) {
+        JOptionPane.showMessageDialog(this, msg, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void showSuccess(String msg) {
+        JOptionPane.showMessageDialog(this, msg, "Thanh cong", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // ---- Utility ----
     private JLabel makeLabel(String text, Font f) {
         JLabel l = new JLabel(text); l.setFont(f); return l;
     }
