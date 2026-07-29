@@ -1,106 +1,130 @@
-// Demo su dung Exception trong he thong Quan ly Tuyen sinh
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class DemoException {
 
-    // Danh sach gia lap
-    static String[] dsSoBD = {"TS001", "TS002", "TS003"};
+    static ArrayList<String[]> danhSach = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);
 
-    // ============================================================
-    // Ham gia lap: Them thi sinh - nem exception khi co loi
-    // ============================================================
-    static void themThiSinh(String soBD, double diem)
+    // ---- Them thi sinh, nem exception neu co loi ----
+    static void themThiSinh(String soBD, String hoTen, double diem)
             throws SoBDDaTonTaiException, DiemKhongHopLeException {
 
-        // Kiem tra diem hop le
-        if (diem < 0 || diem > 30) {
+        if (diem < 0 || diem > 30)
             throw new DiemKhongHopLeException(diem);
-        }
 
-        // Kiem tra trung so bao danh
-        for (String id : dsSoBD) {
-            if (id.equalsIgnoreCase(soBD)) {
+        for (String[] ts : danhSach)
+            if (ts[0].equalsIgnoreCase(soBD))
                 throw new SoBDDaTonTaiException(soBD);
-            }
-        }
 
-        System.out.println("✔ Them thanh cong: " + soBD + " | Diem: " + diem);
+        danhSach.add(new String[]{soBD, hoTen, String.valueOf(diem)});
     }
 
-    // ============================================================
-    // Ham gia lap: Tim kiem - nem exception neu khong thay
-    // ============================================================
-    static String timKiem(String soBD) throws ThiSinhKhongTonTaiException {
-        for (String id : dsSoBD) {
-            if (id.equalsIgnoreCase(soBD)) return id;
-        }
+    // ---- Tim kiem, nem exception neu khong thay ----
+    static String[] timKiem(String soBD) throws ThiSinhKhongTonTaiException {
+        for (String[] ts : danhSach)
+            if (ts[0].equalsIgnoreCase(soBD)) return ts;
         throw new ThiSinhKhongTonTaiException(soBD);
     }
 
-    // ============================================================
-    // MAIN - Chay demo
-    // ============================================================
+    // ---- Hien thi danh sach ----
+    static void hienThi() {
+        if (danhSach.isEmpty()) {
+            System.out.println("  (Danh sach trong)");
+            return;
+        }
+        System.out.println("  +----------+----------------------+-------+");
+        System.out.println("  | So BD    | Ho Ten               | Diem  |");
+        System.out.println("  +----------+----------------------+-------+");
+        for (String[] ts : danhSach)
+            System.out.printf("  | %-8s | %-20s | %-5s |\n", ts[0], ts[1], ts[2]);
+        System.out.println("  +----------+----------------------+-------+");
+    }
+
+    // ---- Menu chinh ----
     public static void main(String[] args) {
-        System.out.println("========================================");
-        System.out.println("  DEMO EXCEPTION - Quan ly Tuyen sinh  ");
-        System.out.println("========================================\n");
+        System.out.println("╔══════════════════════════════════════╗");
+        System.out.println("║   QUAN LY TUYEN SINH - BUOI 6        ║");
+        System.out.println("║   Minh hoa Exception Handling        ║");
+        System.out.println("╚══════════════════════════════════════╝");
 
-        // ---- Demo 1: Them hop le ----
-        System.out.println("--- TH1: Them thi sinh hop le ---");
+        int choice = -1;
+        while (choice != 0) {
+            System.out.println("\n====== MENU ======");
+            System.out.println("1. Them thi sinh");
+            System.out.println("2. Tim kiem thi sinh");
+            System.out.println("3. Hien thi danh sach");
+            System.out.println("0. Thoat");
+            System.out.print("Chon: ");
+
+            try {
+                choice = Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("✘ Vui long nhap so tu 0-3!");
+                continue;
+            }
+
+            switch (choice) {
+                case 1 -> menuThem();
+                case 2 -> menuTimKiem();
+                case 3 -> { System.out.println("\n-- Danh sach thi sinh --"); hienThi(); }
+                case 0 -> System.out.println("Tam biet!");
+                default -> System.out.println("✘ Lua chon khong hop le!");
+            }
+        }
+        sc.close();
+    }
+
+    // ---- Menu them ----
+    static void menuThem() {
+        System.out.println("\n-- THEM THI SINH --");
+        System.out.print("Nhap So Bao Danh : ");
+        String soBD = sc.nextLine().trim();
+
+        System.out.print("Nhap Ho Ten      : ");
+        String hoTen = sc.nextLine().trim();
+
+        System.out.print("Nhap Tong Diem   : ");
+        String diemStr = sc.nextLine().trim();
+
+        double diem;
         try {
-            themThiSinh("TS999", 27.5);
-        } catch (TuyenSinhException e) {
-            System.out.println("✘ Loi: " + e.getMessage());
+            diem = Double.parseDouble(diemStr);
+        } catch (NumberFormatException e) {
+            System.out.println("✘ Loi: Tong diem phai la so! (Vi du: 27.5)");
+            return;
         }
 
-        // ---- Demo 2: Diem khong hop le ----
-        System.out.println("\n--- TH2: Diem vuot ngoai 0-30 ---");
         try {
-            themThiSinh("TS100", 35.0);
+            themThiSinh(soBD, hoTen, diem);
+            System.out.println("✔ Them thanh cong: [" + soBD + "] " + hoTen + " - " + diem);
+
         } catch (DiemKhongHopLeException e) {
             System.out.println("✘ DiemKhongHopLeException: " + e.getMessage());
-            System.out.println("  Diem bi loi: " + e.getDiem());
+            System.out.println("  >> Diem nhap vao: " + e.getDiem());
+
         } catch (SoBDDaTonTaiException e) {
             System.out.println("✘ SoBDDaTonTaiException: " + e.getMessage());
+            System.out.println("  >> So bao danh bi trung: " + e.getSoBD());
         }
+    }
 
-        // ---- Demo 3: Trung so bao danh ----
-        System.out.println("\n--- TH3: So bao danh da ton tai ---");
-        try {
-            themThiSinh("TS001", 25.0);
-        } catch (DiemKhongHopLeException e) {
-            System.out.println("✘ DiemKhongHopLeException: " + e.getMessage());
-        } catch (SoBDDaTonTaiException e) {
-            System.out.println("✘ SoBDDaTonTaiException: " + e.getMessage());
-            System.out.println("  SoBD bi trung: " + e.getSoBD());
-        }
+    // ---- Menu tim kiem ----
+    static void menuTimKiem() {
+        System.out.println("\n-- TIM KIEM THI SINH --");
+        System.out.print("Nhap So Bao Danh can tim: ");
+        String soBD = sc.nextLine().trim();
 
-        // ---- Demo 4: Tim kiem thanh cong ----
-        System.out.println("\n--- TH4: Tim kiem hop le ---");
         try {
-            String ket = timKiem("TS002");
-            System.out.println("✔ Tim thay thi sinh: " + ket);
+            String[] ts = timKiem(soBD);
+            System.out.println("✔ Tim thay:");
+            System.out.println("  So BD  : " + ts[0]);
+            System.out.println("  Ho Ten : " + ts[1]);
+            System.out.println("  Diem   : " + ts[2]);
+
         } catch (ThiSinhKhongTonTaiException e) {
             System.out.println("✘ ThiSinhKhongTonTaiException: " + e.getMessage());
+            System.out.println("  >> SoBD khong ton tai: " + e.getSoBD());
         }
-
-        // ---- Demo 5: Tim kiem khong thay ----
-        System.out.println("\n--- TH5: Tim thi sinh khong ton tai ---");
-        try {
-            timKiem("TS999");
-        } catch (ThiSinhKhongTonTaiException e) {
-            System.out.println("✘ ThiSinhKhongTonTaiException: " + e.getMessage());
-            System.out.println("  SoBD khong tim thay: " + e.getSoBD());
-        }
-
-        // ---- Demo 6: Bat lop cha (bat tat ca) ----
-        System.out.println("\n--- TH6: Dung lop cha de bat moi loi ---");
-        try {
-            themThiSinh("TS001", -5.0);  // 2 loi: diem < 0 va trung SoBD
-        } catch (TuyenSinhException e) {
-            // TuyenSinhException bat duoc ca 2 loai con
-            System.out.println("✘ TuyenSinhException (bat cha): " + e.getMessage());
-            System.out.println("  Loai cu the: " + e.getClass().getSimpleName());
-        }
-
-        System.out.println("\n========== KET THUC DEMO ==========");
     }
 }
