@@ -1,46 +1,45 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// ============================================================
-// CAC LOP EXCEPTION (dinh nghia trong cung 1 file)
-// ============================================================
-
-class SinhVienException extends Exception {
-    public SinhVienException(String message) { super(message); }
-}
-
-class MaSoTonTaiException extends SinhVienException {
-    private String maSo;
-    public MaSoTonTaiException(String maSo) {
-        super("Ma so '" + maSo + "' da ton tai!");
-        this.maSo = maSo;
-    }
-    public String getMaSo() { return maSo; }
-}
-
-class DiemKhongHopLeException extends SinhVienException {
-    private double diem;
-    public DiemKhongHopLeException(double diem) {
-        super("Diem " + diem + " khong hop le! Phai tu 0.0 den 10.0");
-        this.diem = diem;
-    }
-    public double getDiem() { return diem; }
-}
-
-class SinhVienKhongTonTaiException extends SinhVienException {
-    private String maSo;
-    public SinhVienKhongTonTaiException(String maSo) {
-        super("Khong tim thay sinh vien co ma so: '" + maSo + "'");
-        this.maSo = maSo;
-    }
-    public String getMaSo() { return maSo; }
-}
-
-// ============================================================
-// MAIN CLASS - CHAY CHINH
-// ============================================================
 public class DemoException {
 
+    // ============================================================
+    // INNER CLASS: Cac lop Exception (nam ben trong DemoException)
+    // ============================================================
+    static class SinhVienException extends Exception {
+        public SinhVienException(String msg) { super(msg); }
+    }
+
+    static class MaSoTonTaiException extends SinhVienException {
+        private final String maSo;
+        public MaSoTonTaiException(String maSo) {
+            super("Ma so '" + maSo + "' da ton tai!");
+            this.maSo = maSo;
+        }
+        public String getMaSo() { return maSo; }
+    }
+
+    static class DiemKhongHopLeException extends SinhVienException {
+        private final double diem;
+        public DiemKhongHopLeException(double diem) {
+            super("Diem " + diem + " khong hop le! Phai tu 0.0 den 10.0");
+            this.diem = diem;
+        }
+        public double getDiem() { return diem; }
+    }
+
+    static class SinhVienKhongTonTaiException extends SinhVienException {
+        private final String maSo;
+        public SinhVienKhongTonTaiException(String maSo) {
+            super("Khong tim thay sinh vien co ma so: '" + maSo + "'");
+            this.maSo = maSo;
+        }
+        public String getMaSo() { return maSo; }
+    }
+
+    // ============================================================
+    // DU LIEU VA CAC HAM XU LY
+    // ============================================================
     static ArrayList<String[]> danhSach = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
 
@@ -75,6 +74,9 @@ public class DemoException {
         System.out.println("  +---------+--------------------+----------+------+");
     }
 
+    // ============================================================
+    // MAIN
+    // ============================================================
     public static void main(String[] args) {
         int choice = -1;
         System.out.println("==========================================");
@@ -104,11 +106,11 @@ public class DemoException {
                         them(ms, ht, "CongNghe", new double[]{t, lh});
                         System.out.println(">> Them thanh cong!");
                     } catch (DiemKhongHopLeException e) {
-                        System.out.println(">> LOI: " + e.getMessage() + " | Diem sai: " + e.getDiem());
+                        System.out.println(">> LOI DiemKhongHopLe: " + e.getMessage());
                     } catch (MaSoTonTaiException e) {
-                        System.out.println(">> LOI: " + e.getMessage() + " | Ma so: " + e.getMaSo());
+                        System.out.println(">> LOI MaSoTonTai: " + e.getMessage());
                     } catch (NumberFormatException e) {
-                        System.out.println(">> LOI: Diem phai la so (vi du: 8.5)");
+                        System.out.println(">> LOI: Diem phai la so!");
                     }
                 }
                 case 2 -> {
@@ -121,11 +123,11 @@ public class DemoException {
                         them(ms, ht, "KinhTe", new double[]{t, v, a});
                         System.out.println(">> Them thanh cong!");
                     } catch (DiemKhongHopLeException e) {
-                        System.out.println(">> LOI: " + e.getMessage() + " | Diem sai: " + e.getDiem());
+                        System.out.println(">> LOI DiemKhongHopLe: " + e.getMessage());
                     } catch (MaSoTonTaiException e) {
-                        System.out.println(">> LOI: " + e.getMessage() + " | Ma so: " + e.getMaSo());
+                        System.out.println(">> LOI MaSoTonTai: " + e.getMessage());
                     } catch (NumberFormatException e) {
-                        System.out.println(">> LOI: Diem phai la so (vi du: 7.5)");
+                        System.out.println(">> LOI: Diem phai la so!");
                     }
                 }
                 case 3 -> hienThi();
@@ -136,7 +138,7 @@ public class DemoException {
                         System.out.printf(">> Tim thay: [%s] %s | %s | Tong: %s%n",
                                 sv[0], sv[1], sv[2], sv[3]);
                     } catch (SinhVienKhongTonTaiException e) {
-                        System.out.println(">> LOI: " + e.getMessage() + " | Ma so: " + e.getMaSo());
+                        System.out.println(">> LOI SinhVienKhongTonTai: " + e.getMessage());
                     }
                 }
                 case 0 -> System.out.println("Tam biet!");
