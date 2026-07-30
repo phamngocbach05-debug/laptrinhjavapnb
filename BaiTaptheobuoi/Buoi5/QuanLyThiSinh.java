@@ -6,29 +6,25 @@ public class QuanLyThiSinh implements IQuanLyThiSinh {
 
     private ArrayList<ThiSinh> danhSach = new ArrayList<>();
 
-    // ---- Them thi sinh ----
     @Override
     public void them(ThiSinh ts) {
         danhSach.add(ts);
         System.out.println("✔ Da them: " + ts);
     }
 
-    // ---- Hien thi toan bo ----
     @Override
     public void hienThi() {
         if (danhSach.isEmpty()) {
             System.out.println("  (Danh sach trong)");
             return;
         }
-        System.out.println("-----------------------------------------------------------");
-        for (ThiSinh ts : danhSach) {
-            ts.hienThiThongTin();   // Goi dong: lop con nao chay phuong thuc cua lop do
-        }
-        System.out.println("-----------------------------------------------------------");
-        System.out.println("  Tong so thi sinh: " + danhSach.size());
+        System.out.println("--------------------------------------------------------------------");
+        for (ThiSinh ts : danhSach)
+            ts.hienThiThongTin();
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("  Tong: " + danhSach.size() + " thi sinh");
     }
 
-    // ---- Tim kiem theo ma so ----
     @Override
     public ThiSinh timKiem(String maSo) {
         for (ThiSinh ts : danhSach)
@@ -40,21 +36,21 @@ public class QuanLyThiSinh implements IQuanLyThiSinh {
     public ArrayList<ThiSinh> getDanhSach() { return danhSach; }
 
     // ================================================================
-    // MAIN - Nhap lieu tu ban phim
+    // MAIN
     // ================================================================
     public static void main(String[] args) {
         QuanLyThiSinh ql = new QuanLyThiSinh();
         Scanner sc = new Scanner(System.in);
         int choice = -1;
 
-        System.out.println("╔══════════════════════════════════╗");
-        System.out.println("║     QUAN LY THI SINH - BUOI 5    ║");
-        System.out.println("╚══════════════════════════════════╝");
+        System.out.println("╔══════════════════════════════════════╗");
+        System.out.println("║      QUAN LY THI SINH - BUOI 5       ║");
+        System.out.println("╚══════════════════════════════════════╝");
 
         while (choice != 0) {
             System.out.println("\n====== MENU ======");
-            System.out.println("1. Them thi sinh trong tinh");
-            System.out.println("2. Them thi sinh ngoai tinh");
+            System.out.println("1. Them thi sinh nganh Cong nghe  (Toan + Ly-Hoa)");
+            System.out.println("2. Them thi sinh nganh Kinh te    (Toan + Van + Anh)");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Tim kiem theo ma so");
             System.out.println("0. Thoat");
@@ -63,27 +59,26 @@ public class QuanLyThiSinh implements IQuanLyThiSinh {
             try {
                 choice = Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Vui long nhap so!");
-                continue;
+                System.out.println("Vui long nhap so!"); continue;
             }
 
             switch (choice) {
                 case 1 -> {
-                    System.out.println("\n-- THEM THI SINH TRONG TINH --");
-                    System.out.print("Ma so   : "); String ms = sc.nextLine().trim();
-                    System.out.print("Ho ten  : "); String ht = sc.nextLine().trim();
-                    System.out.print("Diem    : "); double d  = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem uu tien: "); double ut = Double.parseDouble(sc.nextLine().trim());
-                    ql.them(new ThiSinhTrongTinh(ms, ht, d, ut));
+                    System.out.println("\n-- THEM THI SINH CONG NGHE --");
+                    System.out.print("Ma so       : "); String ms = sc.nextLine().trim();
+                    System.out.print("Ho ten      : "); String ht = sc.nextLine().trim();
+                    System.out.print("Diem Toan   : "); double toan   = Double.parseDouble(sc.nextLine().trim());
+                    System.out.print("Diem Ly-Hoa : "); double lyHoa  = Double.parseDouble(sc.nextLine().trim());
+                    ql.them(new ThiSinhCongNghe(ms, ht, toan, lyHoa));
                 }
                 case 2 -> {
-                    System.out.println("\n-- THEM THI SINH NGOAI TINH --");
-                    System.out.print("Ma so   : "); String ms = sc.nextLine().trim();
-                    System.out.print("Ho ten  : "); String ht = sc.nextLine().trim();
-                    System.out.print("Diem    : "); double d  = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Tinh    : "); String ti = sc.nextLine().trim();
-                    System.out.print("Phi KTX : "); double phi = Double.parseDouble(sc.nextLine().trim());
-                    ql.them(new ThiSinhNgoaiTinh(ms, ht, d, ti, phi));
+                    System.out.println("\n-- THEM THI SINH KINH TE --");
+                    System.out.print("Ma so       : "); String ms = sc.nextLine().trim();
+                    System.out.print("Ho ten      : "); String ht = sc.nextLine().trim();
+                    System.out.print("Diem Toan   : "); double toan = Double.parseDouble(sc.nextLine().trim());
+                    System.out.print("Diem Van    : "); double van  = Double.parseDouble(sc.nextLine().trim());
+                    System.out.print("Diem Anh    : "); double anh  = Double.parseDouble(sc.nextLine().trim());
+                    ql.them(new ThiSinhKinhTe(ms, ht, toan, van, anh));
                 }
                 case 3 -> {
                     System.out.println("\n-- DANH SACH THI SINH --");
@@ -91,14 +86,9 @@ public class QuanLyThiSinh implements IQuanLyThiSinh {
                 }
                 case 4 -> {
                     System.out.print("\nNhap ma so can tim: ");
-                    String ms = sc.nextLine().trim();
-                    ThiSinh ts = ql.timKiem(ms);
-                    if (ts != null) {
-                        System.out.println("✔ Tim thay:");
-                        ts.hienThiThongTin();
-                    } else {
-                        System.out.println("✘ Khong tim thay ma so: " + ms);
-                    }
+                    ThiSinh ts = ql.timKiem(sc.nextLine().trim());
+                    if (ts != null) { System.out.println("✔ Tim thay:"); ts.hienThiThongTin(); }
+                    else System.out.println("✘ Khong tim thay!");
                 }
                 case 0 -> System.out.println("Tam biet!");
                 default -> System.out.println("Lua chon khong hop le!");
