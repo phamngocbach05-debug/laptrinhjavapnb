@@ -1,30 +1,25 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Buoi 6: Demo Exception Handling - nhap lieu tu ban phim
+// Buoi 6: Demo Exception Handling cho he thong Quan ly Thi sinh
 public class DemoException {
 
     static ArrayList<String[]> danhSach = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
 
-    // Kiem tra diem hop le (moi mon: 0-10)
+    // Kiem tra diem hop le (0-10)
     static void kiemTraDiem(double diem) throws DiemKhongHopLeException {
         if (diem < 0 || diem > 10)
             throw new DiemKhongHopLeException(diem);
     }
 
-    // Them sinh vien, nem exception neu loi
+    // Them sinh vien, nem exception neu co loi
     static void them(String maSo, String hoTen, String nganh, double[] diems)
             throws MaSoTonTaiException, DiemKhongHopLeException {
-
-        // Kiem tra tung diem
         for (double d : diems) kiemTraDiem(d);
-
-        // Kiem tra trung ma so
         for (String[] sv : danhSach)
             if (sv[0].equalsIgnoreCase(maSo))
                 throw new MaSoTonTaiException(maSo);
-
         double tong = 0;
         for (double d : diems) tong += d;
         danhSach.add(new String[]{maSo, hoTen, nganh, String.format("%.2f", tong)});
@@ -54,15 +49,15 @@ public class DemoException {
     // ================================================================
     public static void main(String[] args) {
         int choice = -1;
-        System.out.println("╔══════════════════════════════════════╗");
-        System.out.println("║  QUAN LY SINH VIEN - BUOI 6          ║");
-        System.out.println("║  Exception Handling                  ║");
-        System.out.println("╚══════════════════════════════════════╝");
+        System.out.println("╔════════════════════════════════════════╗");
+        System.out.println("║   QUAN LY THI SINH - BUOI 6            ║");
+        System.out.println("║   Minh hoa Exception Handling          ║");
+        System.out.println("╚════════════════════════════════════════╝");
 
         while (choice != 0) {
             System.out.println("\n====== MENU ======");
-            System.out.println("1. Them SV Cong nghe  (Toan + Ly-Hoa)");
-            System.out.println("2. Them SV Kinh te    (Toan + Van + Anh)");
+            System.out.println("1. Them SV Cong nghe  (Toan + Ly-Hoa, moi mon 0-10)");
+            System.out.println("2. Them SV Kinh te    (Toan + Van + Anh, moi mon 0-10)");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Tim kiem theo ma so");
             System.out.println("0. Thoat");
@@ -73,7 +68,7 @@ public class DemoException {
 
             switch (choice) {
                 case 1 -> {
-                    System.out.println("\n-- THEM SV CONG NGHE (diem moi mon: 0-10) --");
+                    System.out.println("\n-- THEM SV CONG NGHE --");
                     try {
                         System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                         System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
@@ -92,7 +87,7 @@ public class DemoException {
                     }
                 }
                 case 2 -> {
-                    System.out.println("\n-- THEM SV KINH TE (diem moi mon: 0-10) --");
+                    System.out.println("\n-- THEM SV KINH TE --");
                     try {
                         System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                         System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
@@ -111,13 +106,12 @@ public class DemoException {
                         System.out.println("✘ Diem phai la so! (Vi du: 7.5)");
                     }
                 }
-                case 3 -> { System.out.println("\n-- DANH SACH --"); hienThi(); }
+                case 3 -> { System.out.println(); hienThi(); }
                 case 4 -> {
                     System.out.print("\nNhap ma so can tim: "); String ms = sc.nextLine().trim();
                     try {
                         String[] sv = timKiem(ms);
-                        System.out.println("✔ Tim thay:");
-                        System.out.printf("  Ma so: %s | Ho ten: %s | Nganh: %s | Tong: %s%n",
+                        System.out.printf("✔ Tim thay: [%s] %s | %s | Tong: %s%n",
                                 sv[0], sv[1], sv[2], sv[3]);
                     } catch (SinhVienKhongTonTaiException e) {
                         System.out.println("✘ SinhVienKhongTonTaiException: " + e.getMessage());
