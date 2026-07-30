@@ -1,15 +1,11 @@
-
-
-// Nem ra khi tong diem nhap vao khong hop le (ngoai khoang 0 - 30)
-public class DiemKhongHopLeException extends TuyenSinhException {
+// Nem ra khi diem nhap vao ngoai khoang cho phep (0 - 10)
+public class DiemKhongHopLeException extends SinhVienException {
     private double diem;
 
     public DiemKhongHopLeException(double diem) {
-        super("Tong diem " + diem + " khong hop le! Diem phai trong khoang 0.0 - 30.0");
+        super("Diem " + diem + " khong hop le! Diem phai trong khoang 0.0 - 10.0");
         this.diem = diem;
     }
 
-    public double getDiem() {
-        return diem;
-    }
+    public double getDiem() { return diem; }
 }
