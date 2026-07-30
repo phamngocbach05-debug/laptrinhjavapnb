@@ -1,62 +1,25 @@
-// Lop ThiSinhNgoaiTinh - Ke thua ThiSinh, bo sung thuoc tinh thi sinh ngoai tinh
+// Lop con 2: Thi sinh ngoai tinh - co them phi ky tuc xa
 public class ThiSinhNgoaiTinh extends ThiSinh {
-    private String tinhNguon;     // Tinh que quan
-    private String khuVuc;        // KV1 / KV2 / KV2-NT / KV3
-    private double phiNhapHoc;    // Phi nhap hoc (ngoai tinh co the cao hon)
+    private String tinh;
+    private double phiKTX;
 
     public ThiSinhNgoaiTinh() {}
 
-    public ThiSinhNgoaiTinh(String maSoBD, String hoTen, String gioiTinh,
-                             double tongDiem, String nganhDK,
-                             String tinhNguon, String khuVuc, double phiNhapHoc) {
-        super(maSoBD, hoTen, gioiTinh, tongDiem, nganhDK);
-        this.tinhNguon   = tinhNguon;
-        this.khuVuc      = khuVuc;
-        this.phiNhapHoc  = phiNhapHoc;
+    public ThiSinhNgoaiTinh(String maSo, String hoTen, double diem, String tinh, double phiKTX) {
+        super(maSo, hoTen, diem);   // Goi constructor lop cha
+        this.tinh   = tinh;
+        this.phiKTX = phiKTX;
     }
 
-    public String getTinhNguon()  { return tinhNguon; }
-    public String getKhuVuc()     { return khuVuc; }
-    public double getPhiNhapHoc() { return phiNhapHoc; }
+    public String getTinh()    { return tinh; }
+    public double getPhiKTX()  { return phiKTX; }
+    public void setTinh(String tinh)      { this.tinh = tinh; }
+    public void setPhiKTX(double phiKTX)  { this.phiKTX = phiKTX; }
 
-    public void setTinhNguon(String tinhNguon)    { this.tinhNguon = tinhNguon; }
-    public void setKhuVuc(String khuVuc)          { this.khuVuc = khuVuc; }
-    public void setPhiNhapHoc(double phiNhapHoc)  { this.phiNhapHoc = phiNhapHoc; }
-
-    // Diem cong them theo khu vuc: KV1=+1.5, KV2=+1.0, KV2-NT=+0.5, KV3=0
-    public double diemCongKhuVuc() {
-        switch (khuVuc) {
-            case "KV1":    return 1.5;
-            case "KV2":    return 1.0;
-            case "KV2-NT": return 0.5;
-            default:       return 0.0;
-        }
-    }
-
-    public double diemSauCong() {
-        return tongDiem + diemCongKhuVuc();
-    }
-
+    // Ghi de phuong thuc cua lop cha
     @Override
-    public String loaiThiSinh() {
-        return "Thi sinh ngoai tinh (" + tinhNguon + " - " + khuVuc + ")";
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + String.format(
-                " | Diem cong KV: +%.1f | Diem sau cong: %.1f | Phi: %.0f VND",
-                diemCongKhuVuc(), diemSauCong(), phiNhapHoc);
-    }
-
-    public static void main(String[] args) {
-        ThiSinhNgoaiTinh ts = new ThiSinhNgoaiTinh(
-                "TS201", "Nguyen Van An", "Nam", 27.0,
-                "Co khi", "Nghe An", "KV1", 15000000);
-
-        System.out.println("===== THI SINH NGOAI TINH =====");
-        System.out.println(ts);
-        System.out.println("Diem cong khu vuc: " + ts.diemCongKhuVuc());
-        System.out.println("Diem sau cong    : " + ts.diemSauCong());
+    public void hienThiThongTin() {
+        System.out.printf("Ma so : %-8s | Ho ten: %-20s | Diem: %.1f | Tinh: %-12s | PhiKTX: %.0f [Ngoai tinh]%n",
+                maSo, hoTen, diem, tinh, phiKTX);
     }
 }

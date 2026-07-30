@@ -1,45 +1,26 @@
-// Lop ThiSinhTrongTinh - Ke thua ThiSinh, bo sung thuoc tinh thi sinh trong tinh
+// Lop con 1: Thi sinh trong tinh - co them diem uu tien
 public class ThiSinhTrongTinh extends ThiSinh {
-    private String tinh;          // Ten tinh/thanh pho
-    private boolean uuTien;       // Co duoc uu tien khu vuc khong
+    private double diemUuTien;
 
     public ThiSinhTrongTinh() {}
 
-    public ThiSinhTrongTinh(String maSoBD, String hoTen, String gioiTinh,
-                             double tongDiem, String nganhDK,
-                             String tinh, boolean uuTien) {
-        super(maSoBD, hoTen, gioiTinh, tongDiem, nganhDK);
-        this.tinh    = tinh;
-        this.uuTien  = uuTien;
+    public ThiSinhTrongTinh(String maSo, String hoTen, double diem, double diemUuTien) {
+        super(maSo, hoTen, diem);   // Goi constructor lop cha
+        this.diemUuTien = diemUuTien;
     }
 
-    public String  getTinh()    { return tinh; }
-    public boolean isUuTien()   { return uuTien; }
-    public void    setTinh(String tinh)       { this.tinh = tinh; }
-    public void    setUuTien(boolean uuTien)  { this.uuTien = uuTien; }
+    public double getDiemUuTien() { return diemUuTien; }
+    public void setDiemUuTien(double d) { this.diemUuTien = d; }
 
-    // Diem sau khi cong uu tien khu vuc (0.5 diem neu duoc uu tien)
-    public double diemSauUuTien() {
-        return uuTien ? tongDiem + 0.5 : tongDiem;
+    // Tinh tong diem sau khi cong uu tien
+    public double getDiemSauUuTien() {
+        return diem + diemUuTien;
     }
 
+    // Ghi de phuong thuc cua lop cha
     @Override
-    public String loaiThiSinh() {
-        return "Thi sinh trong tinh (" + tinh + ")" + (uuTien ? " [Uu tien]" : "");
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + String.format(" | Diem sau uu tien: %.1f", diemSauUuTien());
-    }
-
-    public static void main(String[] args) {
-        ThiSinhTrongTinh ts = new ThiSinhTrongTinh(
-                "TS101", "Pham Ngoc Bach", "Nam", 28.5,
-                "Tri tue nhan tao", "Ha Noi", true);
-
-        System.out.println("===== THI SINH TRONG TINH =====");
-        System.out.println(ts);
-        System.out.println("Diem sau uu tien: " + ts.diemSauUuTien());
+    public void hienThiThongTin() {
+        System.out.printf("Ma so : %-8s | Ho ten: %-20s | Diem: %.1f | +UuTien: %.1f | Tong: %.1f [Trong tinh]%n",
+                maSo, hoTen, diem, diemUuTien, getDiemSauUuTien());
     }
 }

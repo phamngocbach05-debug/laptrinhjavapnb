@@ -1,46 +1,35 @@
-// Lop cha ThiSinh - Chua thong tin chung cua thi sinh
+// Lop cha: ThiSinh - chua thong tin co ban cua mot thi sinh
 public class ThiSinh {
-    protected String maSoBD;
+    protected String maSo;
     protected String hoTen;
-    protected String gioiTinh;   // Nam / Nu
-    protected double tongDiem;
-    protected String nganhDK;    // Nganh dang ky
+    protected double diem;
 
     public ThiSinh() {}
 
-    public ThiSinh(String maSoBD, String hoTen, String gioiTinh,
-                   double tongDiem, String nganhDK) {
-        this.maSoBD   = maSoBD;
-        this.hoTen    = hoTen;
-        this.gioiTinh = gioiTinh;
-        this.tongDiem = tongDiem;
-        this.nganhDK  = nganhDK;
+    public ThiSinh(String maSo, String hoTen, double diem) {
+        this.maSo  = maSo;
+        this.hoTen = hoTen;
+        this.diem  = diem;
     }
 
-    public String getMaSoBD()   { return maSoBD; }
-    public String getHoTen()    { return hoTen; }
-    public String getGioiTinh() { return gioiTinh; }
-    public double getTongDiem() { return tongDiem; }
-    public String getNganhDK()  { return nganhDK; }
+    // Getters
+    public String getMaSo()  { return maSo; }
+    public String getHoTen() { return hoTen; }
+    public double getDiem()  { return diem; }
 
-    public void setMaSoBD(String maSoBD)     { this.maSoBD = maSoBD; }
-    public void setHoTen(String hoTen)       { this.hoTen = hoTen; }
-    public void setGioiTinh(String gioiTinh) { this.gioiTinh = gioiTinh; }
-    public void setTongDiem(double tongDiem)  { this.tongDiem = tongDiem; }
-    public void setNganhDK(String nganhDK)   { this.nganhDK = nganhDK; }
+    // Setters
+    public void setMaSo(String maSo)   { this.maSo = maSo; }
+    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+    public void setDiem(double diem)   { this.diem = diem; }
 
-    // Phuong thuc co the override o lop con
-    public String loaiThiSinh() {
-        return "Thi sinh thuong";
-    }
-
-    public String hocBong() {
-        return tongDiem >= 29 ? "Co hoc bong" : "Khong co hoc bong";
+    // Phuong thuc in thong tin - lop con co the ghi de
+    public void hienThiThongTin() {
+        System.out.printf("Ma so : %-8s | Ho ten: %-20s | Diem: %.1f%n",
+                maSo, hoTen, diem);
     }
 
     @Override
     public String toString() {
-        return String.format("[%s] %s | %s | Nganh: %s | Diem: %.1f | %s | %s",
-                maSoBD, hoTen, gioiTinh, nganhDK, tongDiem, loaiThiSinh(), hocBong());
+        return String.format("[%s] %s - Diem: %.1f", maSo, hoTen, diem);
     }
 }
