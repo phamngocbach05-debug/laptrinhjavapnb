@@ -1,0 +1,2 @@
+SV001|Nguyen Van A|CongNghe|17.5
+SV002|Tran Thi B|KinhTe|24.0
