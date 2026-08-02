@@ -1,2 +1,2 @@
-SV001|Nguyen Van A|CongNghe|17.5
-SV002|Tran Thi B|KinhTe|24.0
+2351170576|bach|CNTT|26
+25|t�ng|Kinh t?|36

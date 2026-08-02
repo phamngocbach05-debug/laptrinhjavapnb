@@ -20,7 +20,8 @@ public class ThiSinh {
     public void setHoTen(String hoTen)      { this.hoTen = hoTen; }
     public void setTongDiem(double tongDiem) { this.tongDiem = tongDiem; }
 
-    // Phuong thuc nay se duoc lop con ghi de (override)
+    // Ghi đè
+    
     public void hienThiThongTin() {
         System.out.printf("Ma so: %-8s | Ho ten: %-20s | Tong diem: %.2f%n",
                 maSo, hoTen, tongDiem);

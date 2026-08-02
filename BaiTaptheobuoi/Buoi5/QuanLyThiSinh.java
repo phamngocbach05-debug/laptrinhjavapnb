@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// Buoi5: Ke thua & Da hinh - QuanLyThiSinh implements IQuanLy
+// kế thừa
 public class QuanLyThiSinh implements IQuanLy {
 
     private ArrayList<ThiSinh> danhSach = new ArrayList<>();
@@ -32,7 +32,7 @@ public class QuanLyThiSinh implements IQuanLy {
     @Override
     public ArrayList<ThiSinh> getDanhSach() { return danhSach; }
 
-    // Sap xep theo tong diem giam dan (bubble sort)
+    // Sắp xếp điểm
     public void sapXepTheoDiem() {
         for (int i = 0; i < danhSach.size() - 1; i++)
             for (int j = 0; j < danhSach.size() - 1 - i; j++)
@@ -52,9 +52,7 @@ public class QuanLyThiSinh implements IQuanLy {
         return tong / danhSach.size();
     }
 
-    // ================================================================
-    // MAIN
-    // ================================================================
+    
     public static void main(String[] args) {
         QuanLyThiSinh ql = new QuanLyThiSinh();
         Scanner sc = new Scanner(System.in);

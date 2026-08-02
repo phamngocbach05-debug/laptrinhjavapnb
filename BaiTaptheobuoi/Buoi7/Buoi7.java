@@ -1,22 +1,18 @@
 import java.io.*;
 import java.util.*;
 
-// Buoi 7: Thao tac voi tep tin (File I/O)
-// - Luu danh sach sinh vien vao file text
-// - Doc danh sach sinh vien tu file text
+
 public class Buoi7 {
 
     static final String TEN_FILE = "danhsach.txt";
     static ArrayList<String[]> danhSach = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
 
-    // ============================================================
-    // GHI danh sach vao file text
-    // ============================================================
+   
     static void ghiFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(TEN_FILE))) {
             for (String[] sv : danhSach) {
-                // Moi dong: maSo|hoTen|nganh|tongDiem
+                
                 pw.println(sv[0] + "|" + sv[1] + "|" + sv[2] + "|" + sv[3]);
             }
             System.out.println(">> Da luu " + danhSach.size() + " sinh vien vao file: " + TEN_FILE);
@@ -25,9 +21,7 @@ public class Buoi7 {
         }
     }
 
-    // ============================================================
-    // DOC danh sach tu file text
-    // ============================================================
+    
     static void docFile() {
         danhSach.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(TEN_FILE))) {
@@ -44,9 +38,7 @@ public class Buoi7 {
         }
     }
 
-    // ============================================================
-    // HIEN THI danh sach
-    // ============================================================
+   
     static void hienThi() {
         if (danhSach.isEmpty()) { System.out.println("  (Danh sach trong)"); return; }
         System.out.println("  +---------+--------------------+----------+------+");
@@ -58,14 +50,10 @@ public class Buoi7 {
         System.out.println("  +---------+--------------------+----------+------+");
     }
 
-    // ============================================================
-    // MAIN
-    // ============================================================
+  
     public static void main(String[] args) {
         int choice = -1;
-        System.out.println("==========================================");
-        System.out.println("   BUOI 7: THAO TAC VOI FILE");
-        System.out.println("==========================================");
+        
 
         while (choice != 0) {
             System.out.println("\n--- MENU ---");
