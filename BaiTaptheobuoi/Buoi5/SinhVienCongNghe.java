@@ -1,5 +1,4 @@
-// Lop con 1: Sinh vien nganh Cong nghe
-// Thi 2 mon: Toan + Ly-Hoa
+
 public class SinhVienCongNghe extends ThiSinh {
     private double diemToan;
     private double diemLyHoa;

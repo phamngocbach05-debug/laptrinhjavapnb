@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-// Giao dien dinh nghia cac phep toan quan ly
+// Giao dien 
 public interface IQuanLy {
     void them(ThiSinh ts);
     void hienThi();
