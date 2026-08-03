@@ -52,6 +52,21 @@ public class QuanLyThiSinh implements IQuanLy {
         return tong / danhSach.size();
     }
 
+    // Kiem tra diem hop le (0 - 10)
+    static double nhapDiem(Scanner sc, String tenMon) {
+        while (true) {
+            System.out.print(tenMon);
+            try {
+                double d = Double.parseDouble(sc.nextLine().trim());
+                if (d < 0 || d > 10) {
+                    System.out.println("   >> LOI: Diem phai tu 0 den 10! Nhap lai.");
+                } else return d;
+            } catch (NumberFormatException e) {
+                System.out.println("   >> LOI: Phai nhap so! Nhap lai.");
+            }
+        }
+    }
+
     
     public static void main(String[] args) {
         QuanLyThiSinh ql = new QuanLyThiSinh();
@@ -82,18 +97,18 @@ public class QuanLyThiSinh implements IQuanLy {
                     System.out.println("\n-- THEM TS Cong nghe --");
                     System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                     System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
-                    System.out.print("Diem Toan : "); double toan = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem Ly   : "); double ly   = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem Hoa  : "); double hoa  = Double.parseDouble(sc.nextLine().trim());
+                    double toan = nhapDiem(sc, "Diem Toan : ");
+                    double ly   = nhapDiem(sc, "Diem Ly   : ");
+                    double hoa  = nhapDiem(sc, "Diem Hoa  : ");
                     ql.them(new ThiSinhCongNghe(ms, ht, toan, ly, hoa));
                 }
                 case 2 -> {
                     System.out.println("\n-- THEM TS Kinh te --");
                     System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                     System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
-                    System.out.print("Diem Toan : "); double toan = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem Van  : "); double van  = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem Anh  : "); double anh  = Double.parseDouble(sc.nextLine().trim());
+                    double toan = nhapDiem(sc, "Diem Toan : ");
+                    double van  = nhapDiem(sc, "Diem Van  : ");
+                    double anh  = nhapDiem(sc, "Diem Anh  : ");
                     ql.them(new ThiSinhKinhTe(ms, ht, toan, van, anh));
                 }
                 case 3 -> { System.out.println("\n-- DANH SACH --"); ql.hienThi(); }

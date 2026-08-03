@@ -8,6 +8,23 @@ public class Buoi7 {
     static ArrayList<String[]> danhSach = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
 
+    // Kiem tra diem hop le (0 - 10)
+    static double nhapDiem(String tenMon) {
+        while (true) {
+            System.out.print(tenMon);
+            try {
+                double d = Double.parseDouble(sc.nextLine().trim());
+                if (d < 0 || d > 10) {
+                    System.out.println("   >> LOI: Diem " + tenMon.trim() + " phai tu 0 den 10! Nhap lai.");
+                } else {
+                    return d;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("   >> LOI: Phai nhap so! Nhap lai.");
+            }
+        }
+    }
+
     // ============================================================
     // THEM thi sinh (nhap tu ban phim)
     // ============================================================
@@ -15,29 +32,26 @@ public class Buoi7 {
         System.out.print("Ma so  : "); String ms = sc.nextLine().trim();
         System.out.print("Ho ten : "); String ht = sc.nextLine().trim();
 
-        try {
-            if (loai.equals("CN")) {
-                System.out.print("Diem Toan  : "); double toan = Double.parseDouble(sc.nextLine().trim());
-                System.out.print("Diem Ly    : "); double ly   = Double.parseDouble(sc.nextLine().trim());
-                System.out.print("Diem Hoa   : "); double hoa  = Double.parseDouble(sc.nextLine().trim());
-                double tong = toan + ly + hoa;
-                danhSach.add(new String[]{ms, ht, "CongNghe",
-                        String.format("%.1f+%.1f+%.1f", toan, ly, hoa),
-                        String.format("%.1f", tong)});
-            } else {
-                System.out.print("Diem Toan  : "); double toan = Double.parseDouble(sc.nextLine().trim());
-                System.out.print("Diem Van   : "); double van  = Double.parseDouble(sc.nextLine().trim());
-                System.out.print("Diem Anh   : "); double anh  = Double.parseDouble(sc.nextLine().trim());
-                double tong = toan + van + anh;
-                danhSach.add(new String[]{ms, ht, "KinhTe",
-                        String.format("%.1f+%.1f+%.1f", toan, van, anh),
-                        String.format("%.1f", tong)});
-            }
-            System.out.println(">> Da them: " + ht);
-        } catch (NumberFormatException e) {
-            System.out.println(">> LOI: Diem phai la so!");
+        if (loai.equals("CN")) {
+            double toan = nhapDiem("Diem Toan  : ");
+            double ly   = nhapDiem("Diem Ly    : ");
+            double hoa  = nhapDiem("Diem Hoa   : ");
+            double tong = toan + ly + hoa;
+            danhSach.add(new String[]{ms, ht, "CongNghe",
+                    String.format("%.1f+%.1f+%.1f", toan, ly, hoa),
+                    String.format("%.1f", tong)});
+        } else {
+            double toan = nhapDiem("Diem Toan  : ");
+            double van  = nhapDiem("Diem Van   : ");
+            double anh  = nhapDiem("Diem Anh   : ");
+            double tong = toan + van + anh;
+            danhSach.add(new String[]{ms, ht, "KinhTe",
+                    String.format("%.1f+%.1f+%.1f", toan, van, anh),
+                    String.format("%.1f", tong)});
         }
+        System.out.println(">> Da them: " + ht);
     }
+
 
     // ============================================================
     // HIEN THI danh sach
@@ -98,8 +112,8 @@ public class Buoi7 {
 
         while (choice != 0) {
             System.out.println("\n--- MENU ---");
-            System.out.println("1. Nhap TS Cong nghe (Toan + LyHoa)");
-            System.out.println("2. Nhap TS Kinh te   (Toan + Van + Anh)");
+            System.out.println("1. Nhap TS Cong nghe ");
+            System.out.println("2. Nhap TS Kinh te   ");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Luu vao file  --> " + TEN_FILE);
             System.out.println("5. Tai tu file   <-- " + TEN_FILE);
