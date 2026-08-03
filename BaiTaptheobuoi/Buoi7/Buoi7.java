@@ -17,11 +17,12 @@ public class Buoi7 {
 
         try {
             if (loai.equals("CN")) {
-                System.out.print("Diem Toan  : "); double toan  = Double.parseDouble(sc.nextLine().trim());
-                System.out.print("Diem LyHoa : "); double lyHoa = Double.parseDouble(sc.nextLine().trim());
-                double tong = toan + lyHoa;
+                System.out.print("Diem Toan  : "); double toan = Double.parseDouble(sc.nextLine().trim());
+                System.out.print("Diem Ly    : "); double ly   = Double.parseDouble(sc.nextLine().trim());
+                System.out.print("Diem Hoa   : "); double hoa  = Double.parseDouble(sc.nextLine().trim());
+                double tong = toan + ly + hoa;
                 danhSach.add(new String[]{ms, ht, "CongNghe",
-                        String.format("%.1f+%.1f", toan, lyHoa),
+                        String.format("%.1f+%.1f+%.1f", toan, ly, hoa),
                         String.format("%.1f", tong)});
             } else {
                 System.out.print("Diem Toan  : "); double toan = Double.parseDouble(sc.nextLine().trim());

@@ -51,7 +51,7 @@ public class QuanLyThiSinh implements IQuanLy {
 
         while (choice != 0) {
             System.out.println("\n====== MENU ======");
-            System.out.println("1. Them TS Cong nghe  (Toan + Ly-Hoa)");
+            System.out.println("1. Them TS Cong nghe  (Toan + Ly + Hoa)");;
             System.out.println("2. Them TS Kinh te    (Toan + Van + Anh)");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Tim kiem theo ma so");
@@ -67,9 +67,10 @@ public class QuanLyThiSinh implements IQuanLy {
                     System.out.println("\n-- THEM TS Cong nghe --");
                     System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                     System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
-                    System.out.print("Diem Toan : "); double toan  = Double.parseDouble(sc.nextLine().trim());
-                    System.out.print("Diem LyH0oa: "); double lyHoa = Double.parseDouble(sc.nextLine().trim());
-                    ql.them(new ThiSinhCongNghe(ms, ht, toan, lyHoa));
+                    System.out.print("Diem Toan : "); double toan = Double.parseDouble(sc.nextLine().trim());
+                    System.out.print("Diem Ly   : "); double ly   = Double.parseDouble(sc.nextLine().trim());
+                    System.out.print("Diem Hoa  : "); double hoa  = Double.parseDouble(sc.nextLine().trim());
+                    ql.them(new ThiSinhCongNghe(ms, ht, toan, ly, hoa));
                 }
                 case 2 -> {
                     System.out.println("\n-- THEM TS Kinh te --");
