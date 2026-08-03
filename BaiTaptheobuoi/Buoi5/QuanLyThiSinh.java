@@ -65,8 +65,8 @@ public class QuanLyThiSinh implements IQuanLy {
 
         while (choice != 0) {
             System.out.println("\n====== MENU ======");
-            System.out.println("1. Them SV Cong nghe  (Toan + Ly-Hoa)");
-            System.out.println("2. Them SV Kinh te    (Toan + Van + Anh)");
+            System.out.println("1. Them TS Cong nghe  (Toan + Ly-Hoa)");
+            System.out.println("2. Them TS Kinh te    (Toan + Van + Anh)");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Tim kiem theo ma so");
             System.out.println("5. Sap xep theo diem giam dan");
@@ -79,21 +79,21 @@ public class QuanLyThiSinh implements IQuanLy {
 
             switch (choice) {
                 case 1 -> {
-                    System.out.println("\n-- THEM SV CONG NGHE --");
+                    System.out.println("\n-- THEM TS Cong nghe --");
                     System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                     System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
                     System.out.print("Diem Toan : "); double toan  = Double.parseDouble(sc.nextLine().trim());
                     System.out.print("Diem LyHoa: "); double lyHoa = Double.parseDouble(sc.nextLine().trim());
-                    ql.them(new SinhVienCongNghe(ms, ht, toan, lyHoa));
+                    ql.them(new ThiSinhCongNghe(ms, ht, toan, lyHoa));
                 }
                 case 2 -> {
-                    System.out.println("\n-- THEM SV KINH TE --");
+                    System.out.println("\n-- THEM TS Kinh te --");
                     System.out.print("Ma so     : "); String ms = sc.nextLine().trim();
                     System.out.print("Ho ten    : "); String ht = sc.nextLine().trim();
                     System.out.print("Diem Toan : "); double toan = Double.parseDouble(sc.nextLine().trim());
                     System.out.print("Diem Van  : "); double van  = Double.parseDouble(sc.nextLine().trim());
                     System.out.print("Diem Anh  : "); double anh  = Double.parseDouble(sc.nextLine().trim());
-                    ql.them(new SinhVienKinhTe(ms, ht, toan, van, anh));
+                    ql.them(new ThiSinhKinhTe(ms, ht, toan, van, anh));
                 }
                 case 3 -> { System.out.println("\n-- DANH SACH --"); ql.hienThi(); }
                 case 4 -> {

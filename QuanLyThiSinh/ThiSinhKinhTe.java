@@ -1,12 +1,12 @@
-
-public class SinhVienKinhTe extends ThiSinh {
+// Lop con 2: Sinh vien nganh Kinh te (Toan + Van + Anh)
+public class ThiSinhKinhTe extends ThiSinh {
     private double diemToan;
     private double diemVan;
     private double diemAnh;
 
-    public SinhVienKinhTe() {}
+    public ThiSinhKinhTe() {}
 
-    public SinhVienKinhTe(String maSo, String hoTen,
+    public ThiSinhKinhTe(String maSo, String hoTen,
                           double diemToan, double diemVan, double diemAnh) {
         super(maSo, hoTen, diemToan + diemVan + diemAnh);
         this.diemToan = diemToan;

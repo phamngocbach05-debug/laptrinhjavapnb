@@ -1,11 +1,11 @@
 // Lop con 1: Sinh vien nganh Cong nghe (Toan + Ly-Hoa)
-public class SinhVienCongNghe extends ThiSinh {
+public class ThiSinhCongNghe extends ThiSinh {
     private double diemToan;
     private double diemLyHoa;
 
-    public SinhVienCongNghe() {}
+    public ThiSinhCongNghe() {}
 
-    public SinhVienCongNghe(String maSo, String hoTen,
+    public ThiSinhCongNghe(String maSo, String hoTen,
                             double diemToan, double diemLyHoa) {
         super(maSo, hoTen, diemToan + diemLyHoa);
         this.diemToan  = diemToan;

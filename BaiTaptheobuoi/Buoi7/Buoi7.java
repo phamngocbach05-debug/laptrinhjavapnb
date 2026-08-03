@@ -97,8 +97,8 @@ public class Buoi7 {
 
         while (choice != 0) {
             System.out.println("\n--- MENU ---");
-            System.out.println("1. Nhap SV Cong nghe (Toan + LyHoa)");
-            System.out.println("2. Nhap SV Kinh te   (Toan + Van + Anh)");
+            System.out.println("1. Nhap TS Cong nghe (Toan + LyHoa)");
+            System.out.println("2. Nhap TS Kinh te   (Toan + Van + Anh)");
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Luu vao file  --> " + TEN_FILE);
             System.out.println("5. Tai tu file   <-- " + TEN_FILE);
@@ -109,8 +109,8 @@ public class Buoi7 {
             catch (NumberFormatException e) { System.out.println("Nhap so!"); continue; }
 
             switch (choice) {
-                case 1 -> { System.out.println("\n-- NHAP SV CONG NGHE --"); themThiSinh("CN"); }
-                case 2 -> { System.out.println("\n-- NHAP SV KINH TE --");   themThiSinh("KT"); }
+                case 1 -> { System.out.println("\n-- NHAP TS Cong nghe --"); themThiSinh("CN"); }
+                case 2 -> { System.out.println("\n-- NHAP TS Kinh te --");   themThiSinh("KT"); }
                 case 3 -> hienThi();
                 case 4 -> ghiFile();
                 case 5 -> docFile();
