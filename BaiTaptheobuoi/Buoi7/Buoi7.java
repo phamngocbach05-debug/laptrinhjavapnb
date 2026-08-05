@@ -15,7 +15,7 @@ public class Buoi7 {
             try {
                 double d = Double.parseDouble(sc.nextLine().trim());
                 if (d < 0 || d > 10) {
-                    System.out.println("   >> LOI: Diem " + tenMon.trim() + " phai tu 0 den 10! Nhap lai.");
+                    System.out.println("   >> LOI: Diem " + tenMon.trim() + "  Nhap lai.");
                 } else {
                     return d;
                 }
