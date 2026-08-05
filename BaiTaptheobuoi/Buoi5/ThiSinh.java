@@ -1,5 +1,5 @@
-// Lop cha: ThiSinh - implements IThiSinh
-public class ThiSinh implements IThiSinh {
+// Lop cha: ThiSinh - chua thong tin co ban
+public class ThiSinh {
     protected String maSo;
     protected String hoTen;
     protected double tongDiem;
@@ -20,28 +20,6 @@ public class ThiSinh implements IThiSinh {
     public void setHoTen(String hoTen)       { this.hoTen = hoTen; }
     public void setTongDiem(double tongDiem) { this.tongDiem = tongDiem; }
 
-    // ---- IThiSinh ----
-    @Override
-    public void nhapThongTin() {
-        // Ghi de o lop con neu can
-    }
-
-    @Override
-    public void suaThongTin(String hoTenMoi, double tongDiemMoi) {
-        this.hoTen    = hoTenMoi;
-        this.tongDiem = tongDiemMoi;
-        System.out.println(">> Da sua thong tin: " + hoTenMoi + " | Tong diem: " + tongDiemMoi);
-    }
-
-    @Override
-    public void xoaThongTin() {
-        this.maSo     = "";
-        this.hoTen    = "";
-        this.tongDiem = 0;
-        System.out.println(">> Da xoa thong tin thi sinh.");
-    }
-
-    @Override
     public void hienThiThongTin() {
         System.out.printf("Ma so: %-8s | Ho ten: %-20s | Tong diem: %.2f%n",
                 maSo, hoTen, tongDiem);
