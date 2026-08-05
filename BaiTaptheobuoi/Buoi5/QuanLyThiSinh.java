@@ -30,6 +30,19 @@ public class QuanLyThiSinh implements IQuanLy {
     }
 
     @Override
+    public boolean xoa(String maSo) {
+        for (int i = 0; i < danhSach.size(); i++) {
+            if (danhSach.get(i).getMaSo().equalsIgnoreCase(maSo)) {
+                System.out.println("✔ Da xoa: " + danhSach.get(i).getHoTen());
+                danhSach.remove(i);
+                return true;
+            }
+        }
+        System.out.println("✘ Khong tim thay ma so: " + maSo);
+        return false;
+    }
+
+    @Override
     public ArrayList<ThiSinh> getDanhSach() { return danhSach; }
 
     // Sắp xếp điểm
