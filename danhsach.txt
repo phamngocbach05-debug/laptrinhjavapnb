@@ -1,2 +1,2 @@
-2351170576|bach|CNTT|26
-25|t�ng|Kinh t?|36
+23|bach|CongNghe|8.0+6.0+4.0|18.0
+45|tung|KinhTe|7.0+5.0+1.0|13.0

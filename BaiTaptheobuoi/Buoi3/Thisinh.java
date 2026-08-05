@@ -1,4 +1,4 @@
-// Lop cha: ThiSinh - implements IThiSinh
+
 public class ThiSinh implements IThiSinh {
     protected String maSo;
     protected String hoTen;
@@ -20,10 +20,10 @@ public class ThiSinh implements IThiSinh {
     public void setHoTen(String hoTen)       { this.hoTen = hoTen; }
     public void setTongDiem(double tongDiem) { this.tongDiem = tongDiem; }
 
-    // ---- IThiSinh ----
+   
     @Override
     public void nhapThongTin() {
-        // Ghi de o lop con neu can
+       
     }
 
     @Override

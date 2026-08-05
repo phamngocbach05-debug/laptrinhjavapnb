@@ -1,14 +1,14 @@
 import java.io.*;
 import java.util.*;
 
-// Buoi 7: Thao tac voi File - Nhap lieu + Ghi/Doc file
+
 public class Buoi7 {
 
     static final String TEN_FILE = "danhsach.txt";
     static ArrayList<String[]> danhSach = new ArrayList<>();
     static Scanner sc = new Scanner(System.in);
 
-    // Kiem tra diem hop le (0 - 10)
+   
     static double nhapDiem(String tenMon) {
         while (true) {
             System.out.print(tenMon);
@@ -25,9 +25,7 @@ public class Buoi7 {
         }
     }
 
-    // ============================================================
-    // THEM thi sinh (nhap tu ban phim)
-    // ============================================================
+   
     static void themThiSinh(String loai) {
         System.out.print("Ma so  : "); String ms = sc.nextLine().trim();
         System.out.print("Ho ten : "); String ht = sc.nextLine().trim();
@@ -53,9 +51,7 @@ public class Buoi7 {
     }
 
 
-    // ============================================================
-    // HIEN THI danh sach
-    // ============================================================
+    
     static void hienThi() {
         if (danhSach.isEmpty()) { System.out.println("  (Danh sach trong)"); return; }
         System.out.println("  +---------+--------------------+----------+-----------------+-------+");
@@ -68,9 +64,7 @@ public class Buoi7 {
         System.out.println("  Tong: " + danhSach.size() + " thi sinh");
     }
 
-    // ============================================================
-    // GHI danh sach vao file
-    // ============================================================
+    
     static void ghiFile() {
         try (PrintWriter pw = new PrintWriter(new FileWriter(TEN_FILE))) {
             for (String[] sv : danhSach)
@@ -81,9 +75,7 @@ public class Buoi7 {
         }
     }
 
-    // ============================================================
-    // DOC danh sach tu file
-    // ============================================================
+   
     static void docFile() {
         danhSach.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(TEN_FILE))) {
@@ -101,9 +93,7 @@ public class Buoi7 {
         }
     }
 
-    // ============================================================
-    // MAIN
-    // ============================================================
+    
     public static void main(String[] args) {
         int choice = -1;
         System.out.println("==========================================");
