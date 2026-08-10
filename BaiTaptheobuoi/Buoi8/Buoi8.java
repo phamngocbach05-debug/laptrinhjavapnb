@@ -5,15 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-/**
- * Buoi 8 - Xay dung giao dien Swing cho Quan ly Thi sinh
- * Chua 2 khu vuc nhap lieu:
- *   - Khu vuc ThiSinhCongNghe: JTextField (maSo, hoTen, diemToan, diemLy, diemHoa)
- *                               JRadioButton (daDangKy), JComboBox (nganh CN)
- *   - Khu vuc ThiSinhKinhTe:   JTextField (maSo, hoTen, diemToan, diemVan, diemAnh)
- *                               JRadioButton (daDangKy), JComboBox (nganh KT)
- */
+
+
 public class Buoi8 extends JFrame {
+    
 
     // ===== DU LIEU =====
     private ArrayList<String[]> danhSach = new ArrayList<>();
@@ -91,25 +86,63 @@ public class Buoi8 extends JFrame {
             pBtn.add(b);
 
         // --- Bang ket qua ---
-        String[] cols = {"Ma so", "Ho ten", "Nganh", "Diem Toan", "Diem2", "Diem3", "Tong diem", "Dang ky"};
+        String[] cols = {"STT", "Ma so", "Ho ten", "Nganh", "Toan", "Mon2", "Mon3", "Tong diem", "Dang ky"};
         tableModel = new DefaultTableModel(cols, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
-        table = new JTable(tableModel);
-        table.setRowHeight(24);
-        table.setFont(new Font("Consolas", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 13));
-        table.getTableHeader().setBackground(new Color(13, 71, 161));
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.setSelectionBackground(new Color(197, 225, 255));
-        table.setGridColor(new Color(200, 210, 230));
+        table = new JTable(tableModel) {
+            // Zebra striping (mau xen ke hang)
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
+                Component c = super.prepareRenderer(renderer, row, col);
+                if (!isRowSelected(row)) {
+                    c.setBackground(row % 2 == 0
+                            ? Color.WHITE
+                            : new Color(235, 243, 255));
+                }
+                return c;
+            }
+        };
+        table.setRowHeight(28);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        table.setShowVerticalLines(true);
+        table.setShowHorizontalLines(true);
+        table.setGridColor(new Color(180, 200, 230));
+        table.setIntercellSpacing(new Dimension(8, 4));
+        table.setSelectionBackground(new Color(144, 202, 249));
+        table.setSelectionForeground(Color.BLACK);
+        table.setFillsViewportHeight(true);
+
+        // Header dep
+        JTableHeader header = table.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setBackground(new Color(13, 71, 161));
+        header.setForeground(Color.WHITE);
+        header.setPreferredSize(new Dimension(0, 32));
+        header.setReorderingAllowed(false);
+
+        // Do rong cot
+        int[] colWidths = {40, 80, 160, 100, 65, 65, 65, 85, 70};
+        for (int i = 0; i < colWidths.length; i++) {
+            table.getColumnModel().getColumn(i).setPreferredWidth(colWidths[i]);
+        }
+        // Can giua cac cot so
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        centerRender.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i : new int[]{0, 4, 5, 6, 7, 8})
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRender);
 
         JScrollPane sp = new JScrollPane(table);
-        sp.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(13, 71, 161), 2),
-                "Danh sach thi sinh", TitledBorder.LEFT, TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 13), new Color(13, 71, 161)));
-        sp.setPreferredSize(new Dimension(0, 200));
+        sp.setBorder(BorderFactory.createCompoundBorder(
+                new EmptyBorder(6, 0, 0, 0),
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createLineBorder(new Color(13, 71, 161), 2),
+                        "  Danh sach Thi sinh  ",
+                        TitledBorder.LEFT, TitledBorder.TOP,
+                        new Font("Segoe UI", Font.BOLD, 13),
+                        new Color(13, 71, 161))));
+        sp.getViewport().setBackground(Color.WHITE);
+        sp.setPreferredSize(new Dimension(0, 240));
 
         // --- CENTER panel ---
         JPanel pCenter = new JPanel(new BorderLayout(5, 5));
@@ -200,9 +233,10 @@ public class Buoi8 extends JFrame {
             double tong = toan + ly + hoa;
             String nganh = (String) cnNganh.getSelectedItem();
             String dk = cnDangKy.isSelected() ? "Co" : "Chua";
-            danhSach.add(new String[]{ms, ht, nganh,
+            int stt = danhSach.size() + 1;
+            danhSach.add(new String[]{String.valueOf(stt), ms, ht, nganh,
                     df(toan), df(ly), df(hoa), df(tong), dk});
-            tableModel.addRow(new Object[]{ms, ht, nganh,
+            tableModel.addRow(new Object[]{stt, ms, ht, nganh,
                     df(toan), df(ly), df(hoa), df(tong), dk});
             xoaNhapCN();
             JOptionPane.showMessageDialog(this, "Da them: " + ht + " [CongNghe]", "Thanh cong", JOptionPane.INFORMATION_MESSAGE);
@@ -222,9 +256,10 @@ public class Buoi8 extends JFrame {
             double tong = toan + van + anh;
             String nganh = (String) ktNganh.getSelectedItem();
             String dk = ktDangKy.isSelected() ? "Co" : "Chua";
-            danhSach.add(new String[]{ms, ht, nganh,
+            int stt = danhSach.size() + 1;
+            danhSach.add(new String[]{String.valueOf(stt), ms, ht, nganh,
                     df(toan), df(van), df(anh), df(tong), dk});
-            tableModel.addRow(new Object[]{ms, ht, nganh,
+            tableModel.addRow(new Object[]{stt, ms, ht, nganh,
                     df(toan), df(van), df(anh), df(tong), dk});
             xoaNhapKT();
             JOptionPane.showMessageDialog(this, "Da them: " + ht + " [KinhTe]", "Thanh cong", JOptionPane.INFORMATION_MESSAGE);
