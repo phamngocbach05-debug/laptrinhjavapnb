@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 /**
  * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing)
- * - Doi nut "Tinh TT" thanh "Tao bang"
- * - Bang "Danh sach thi sinh da nhap" hien thi Cuc ky ro rang tat ca cac cot (STT, Ma so, Ho ten,...)
+ * Fix triet de loi header bi an/trang tren Look & Feel Windows.
+ * Hien thi RO RANG 100% tieu de tat ca cac cot ngay khi mo app.
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -148,8 +148,8 @@ public class Buoi8 extends JFrame {
         addLabel(pThongKe, g2, 3, "Điểm TB Chung:");
         g2.gridx = 1; configReadOnlyNumber(txtDiemTrungBinh); pThongKe.add(txtDiemTrungBinh, g2);
 
-        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH (CẤU HÌNH CỰC KỲ RÕ RÀNG KHÔNG ẨN CỘT)
-        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Đ.Toán", "Đ.Lý/Văn", "Đ.Hóa/Anh", "Tổng Điểm"};
+        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH
+        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Điểm 1", "Điểm 2", "Điểm 3", "Tổng Điểm"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
@@ -168,16 +168,27 @@ public class Buoi8 extends JFrame {
         
         table.setRowHeight(28);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        
+
+        // RENDERER RIÊNG CHO TIÊU ĐỀ BẢNG (FIX LỖI HIỂN THỊ HEADER TRÊN WINDOWS)
         JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(new Color(27, 94, 32));
-        header.setForeground(Color.WHITE);
         header.setPreferredSize(new Dimension(0, 32));
         header.setReorderingAllowed(false);
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel label = new JLabel(value.toString(), SwingConstants.CENTER);
+                label.setFont(new Font("Segoe UI", Font.BOLD, 13));
+                label.setOpaque(true);
+                label.setBackground(new Color(27, 94, 32)); // Màu xanh đậm gống header
+                label.setForeground(Color.WHITE);          // Chữ trắng nét đậm
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(200, 200, 200)));
+                return label;
+            }
+        });
 
-        // Đặt kích thước độ rộng chuẩn cho từng cột
-        int[] columnWidths = {50, 100, 200, 150, 80, 80, 80, 100};
+        // Kích thước độ rộng từng cột chuẩn
+        int[] columnWidths = {45, 90, 180, 140, 75, 75, 75, 95};
         for (int i = 0; i < columnWidths.length; i++) {
             TableColumn col = table.getColumnModel().getColumn(i);
             col.setPreferredWidth(columnWidths[i]);
