@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 /**
  * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing)
- * Hien thi ro rang cot STT va tat ca cac cot trong JTable khong bi che/an
+ * - Doi nut "Tinh TT" thanh "Tao bang"
+ * - Bang "Danh sach thi sinh da nhap" hien thi Cuc ky ro rang tat ca cac cot (STT, Ma so, Ho ten,...)
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -17,29 +18,29 @@ public class Buoi8 extends JFrame {
     private ArrayList<String[]> danhSachTS = new ArrayList<>();
 
     // ===== KHU VUC NHAP THONG TIN THI SINH =====
-    private JTextField txtMaSo = new JTextField(18);
-    private JTextField txtHoTen = new JTextField(18);
+    private JTextField txtMaSo = new JTextField(20);
+    private JTextField txtHoTen = new JTextField(20);
     private JComboBox<String> cbLoaiTS = new JComboBox<>(new String[]{"Thí sinh Công nghệ", "Thí sinh Kinh tế"});
     
     private JLabel lblMon1 = new JLabel("Điểm Toán:");
     private JLabel lblMon2 = new JLabel("Điểm Lý:");
     private JLabel lblMon3 = new JLabel("Điểm Hóa:");
     
-    private JTextField txtDiem1 = new JTextField(18);
-    private JTextField txtDiem2 = new JTextField(18);
-    private JTextField txtDiem3 = new JTextField(18);
+    private JTextField txtDiem1 = new JTextField(20);
+    private JTextField txtDiem2 = new JTextField(20);
+    private JTextField txtDiem3 = new JTextField(20);
 
     // ===== CÁC NÚT THAO TÁC =====
-    private JButton btnTinhTT = new JButton("Tính TT");
+    private JButton btnTaoBang = new JButton("Tạo bảng");
     private JButton btnTiep = new JButton("Tiếp");
     private JButton btnThongKe = new JButton("Thống Kê");
     private JButton btnKetThuc = new JButton("Kết Thúc");
 
     // ===== KHU VUC THONG KE =====
-    private JTextField txtTongSoTS = new JTextField(18);
-    private JTextField txtTongTSCN = new JTextField(18);
-    private JTextField txtTongTSKT = new JTextField(18);
-    private JTextField txtDiemTrungBinh = new JTextField(18);
+    private JTextField txtTongSoTS = new JTextField(20);
+    private JTextField txtTongTSCN = new JTextField(20);
+    private JTextField txtTongTSKT = new JTextField(20);
+    private JTextField txtDiemTrungBinh = new JTextField(20);
 
     // ===== BẢNG HIỂN THỊ DANH SÁCH =====
     private DefaultTableModel tableModel;
@@ -115,15 +116,15 @@ public class Buoi8 extends JFrame {
             }
         });
 
-        // 4. HÀNG NÚT THAO TÁC (Tính TT, Tiếp, Thống Kê, Kết Thúc)
-        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
+        // 4. HÀNG NÚT THAO TÁC (Tạo bảng, Tiếp, Thống Kê, Kết Thúc)
+        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 8));
         pButtons.setOpaque(false);
-        styleButton(btnTinhTT);
+        styleButton(btnTaoBang);
         styleButton(btnTiep);
         styleButton(btnThongKe);
         styleButton(btnKetThuc);
 
-        pButtons.add(btnTinhTT);
+        pButtons.add(btnTaoBang);
         pButtons.add(btnTiep);
         pButtons.add(btnThongKe);
         pButtons.add(btnKetThuc);
@@ -147,8 +148,8 @@ public class Buoi8 extends JFrame {
         addLabel(pThongKe, g2, 3, "Điểm TB Chung:");
         g2.gridx = 1; configReadOnlyNumber(txtDiemTrungBinh); pThongKe.add(txtDiemTrungBinh, g2);
 
-        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH (HIỂN THỊ RÕ RÀNG TẤT CẢ CÁC CỘT & STT)
-        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Điểm 1", "Điểm 2", "Điểm 3", "Tổng Điểm"};
+        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH (CẤU HÌNH CỰC KỲ RÕ RÀNG KHÔNG ẨN CỘT)
+        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Đ.Toán", "Đ.Lý/Văn", "Đ.Hóa/Anh", "Tổng Điểm"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
@@ -175,15 +176,14 @@ public class Buoi8 extends JFrame {
         header.setPreferredSize(new Dimension(0, 32));
         header.setReorderingAllowed(false);
 
-        // Đặt độ rộng chuẩn cho từng cột để không bị ẩn / che lấp
-        int[] columnWidths = {50, 95, 185, 150, 75, 75, 75, 95};
+        // Đặt kích thước độ rộng chuẩn cho từng cột
+        int[] columnWidths = {50, 100, 200, 150, 80, 80, 80, 100};
         for (int i = 0; i < columnWidths.length; i++) {
             TableColumn col = table.getColumnModel().getColumn(i);
             col.setPreferredWidth(columnWidths[i]);
-            col.setMinWidth(columnWidths[i] - 15);
         }
 
-        // Căn giữa STT và các cột số liệu
+        // Căn giữa STT và các cột điểm số
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i : new int[]{0, 1, 4, 5, 6, 7}) {
@@ -193,7 +193,7 @@ public class Buoi8 extends JFrame {
         table.setFillsViewportHeight(true);
 
         JScrollPane spTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        spTable.setPreferredSize(new Dimension(800, 170));
+        spTable.setPreferredSize(new Dimension(840, 180));
         spTable.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(new Color(27, 94, 32), 1),
                 "Danh sách Thí sinh đã nhập",
@@ -217,11 +217,11 @@ public class Buoi8 extends JFrame {
 
         add(pMain);
 
-        // Phím Enter nhận sự kiện nút "Tính TT"
-        getRootPane().setDefaultButton(btnTinhTT);
+        // Phím Enter nhận sự kiện nút "Tạo bảng"
+        getRootPane().setDefaultButton(btnTaoBang);
 
         // ===== GÁN SỰ KIỆN NÚT =====
-        btnTinhTT.addActionListener(e -> suKienTinhTT());
+        btnTaoBang.addActionListener(e -> suKienTaoBang());
         btnTiep.addActionListener(e -> suKienTiep());
         btnThongKe.addActionListener(e -> suKienThongKe());
         btnKetThuc.addActionListener(e -> suKienKetThuc());
@@ -236,8 +236,8 @@ public class Buoi8 extends JFrame {
     // XỬ LÝ SỰ KIỆN THAO TÁC
     // =====================================================================
 
-    // 1. Nút "Tính TT" (Thêm & Tính điểm thí sinh)
-    private void suKienTinhTT() {
+    // 1. Nút "Tạo bảng" (Thêm dữ liệu thí sinh vào bảng)
+    private void suKienTaoBang() {
         String ms = txtMaSo.getText().trim();
         String ht = txtHoTen.getText().trim();
 
@@ -276,7 +276,7 @@ public class Buoi8 extends JFrame {
         tableModel.addRow(row);
     }
 
-    // 2. Nút "Tiếp" (Xóa nội dung trong Thí sinh và đặt focus vào ô Mã số)
+    // 2. Nút "Tiếp" (Xóa nội dung nhập liệu và đặt focus vào ô Mã số)
     private void suKienTiep() {
         txtMaSo.setText("");
         txtHoTen.setText("");
@@ -377,7 +377,7 @@ public class Buoi8 extends JFrame {
 
     private void styleButton(JButton b) {
         b.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        b.setPreferredSize(new Dimension(95, 30));
+        b.setPreferredSize(new Dimension(100, 32));
         b.setFocusPainted(false);
     }
 
