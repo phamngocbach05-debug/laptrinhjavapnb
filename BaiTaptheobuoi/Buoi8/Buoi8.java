@@ -1,348 +1,266 @@
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 
-
-
+/**
+ * Buoi 8 - CHUONG TRINH TINH TIEN BAN SACH
+ * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
+ */
 public class Buoi8 extends JFrame {
-    
 
-    // ===== DU LIEU =====
-    private ArrayList<String[]> danhSach = new ArrayList<>();
+    // ===== KHU VUC HOA DON =====
+    private JTextField txtTenKH = new JTextField(20);
+    private JTextField txtSoLuong = new JTextField(20);
+    private JCheckBox chkLaSV = new JCheckBox();
+    private JTextField txtThanhTien = new JTextField(20);
 
-    // ===== KHUA VUC CONG NGHE =====
-    private JTextField cnMaSo   = new JTextField(10);
-    private JTextField cnHoTen  = new JTextField(14);
-    private JTextField cnToan   = new JTextField(5);
-    private JTextField cnLy     = new JTextField(5);
-    private JTextField cnHoa    = new JTextField(5);
-    private JRadioButton cnDangKy = new JRadioButton("Da dang ky");
-    private JComboBox<String> cnNganh = new JComboBox<>(new String[]{
-            "CNTT", "Co khi", "Dien tu", "Xay dung"});
+    // ===== BUTTONS =====
+    private JButton btnTinhTT = new JButton("Tính TT");
+    private JButton btnTiep = new JButton("Tiếp");
+    private JButton btnThongKe = new JButton("Thống Kê");
+    private JButton btnKetThuc = new JButton("Kết Thúc");
 
-    // ===== KHU VUC KINH TE =====
-    private JTextField ktMaSo   = new JTextField(10);
-    private JTextField ktHoTen  = new JTextField(14);
-    private JTextField ktToan   = new JTextField(5);
-    private JTextField ktVan    = new JTextField(5);
-    private JTextField ktAnh    = new JTextField(5);
-    private JRadioButton ktDangKy = new JRadioButton("Da dang ky");
-    private JComboBox<String> ktNganh = new JComboBox<>(new String[]{
-            "Ke toan", "Tai chinh", "Quan tri", "Marketing"});
+    // ===== KHU VUC THONG KE =====
+    private JTextField txtTongKH = new JTextField(20);
+    private JTextField txtTongKHSV = new JTextField(20);
+    private JTextField txtTongDoanhThu = new JTextField(20);
 
-    // ===== BANG DU LIEU =====
-    private DefaultTableModel tableModel;
-    private JTable table;
+    // ===== BIEN THEO DOI THONG KE =====
+    private int tongKHCount = 0;
+    private int tongKHSVCount = 0;
+    private double tongDoanhThuVal = 0.0;
+    private static final double DON_GIA = 20000.0;
+    private DecimalFormat df = new DecimalFormat("#,##0 VNĐ");
 
-    // =====================================================================
     public Buoi8() {
-        setTitle("Buoi 8 - Quan ly Thi sinh (Swing GUI)");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(8, 8));
-        getContentPane().setBackground(new Color(240, 244, 250));
+        // 1. Tieu de form
+        setTitle("Quản Lý Sách (Phạm Ngọc Bách – 2351170576)");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
 
-        // --- Tieu de ---
-        JLabel lblTitle = new JLabel("QUAN LY THI SINH", SwingConstants.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitle.setForeground(new Color(13, 71, 161));
-        lblTitle.setBorder(new EmptyBorder(12, 0, 4, 0));
-        add(lblTitle, BorderLayout.NORTH);
-
-        // --- Panel nhap lieu (2 khu vuc) ---
-        JPanel pInput = new JPanel(new GridLayout(1, 2, 12, 0));
-        pInput.setOpaque(false);
-        pInput.setBorder(new EmptyBorder(0, 10, 0, 10));
-        pInput.add(buildCNPanel());
-        pInput.add(buildKTPanel());
-
-        // --- Panel buttons ---
-        JButton btnThemCN  = new JButton("Them CN");
-        JButton btnThemKT  = new JButton("Them KT");
-        JButton btnHienThi = new JButton("Hien thi");
-        JButton btnXoa     = new JButton("Xoa dong");
-        JButton btnXoaHet  = new JButton("Xoa het");
-        JButton btnThoat   = new JButton("Thoat");
-
-        styleBtn(btnThemCN,  new Color(27, 94, 32));
-        styleBtn(btnThemKT,  new Color(1, 87, 155));
-        styleBtn(btnHienThi, new Color(74, 20, 140));
-        styleBtn(btnXoa,     new Color(183, 28, 28));
-        styleBtn(btnXoaHet,  new Color(130, 0, 0));
-        styleBtn(btnThoat,   new Color(62, 62, 62));
-
-        btnThemCN.addActionListener(e -> themCongNghe());
-        btnThemKT.addActionListener(e -> themKinhTe());
-        btnHienThi.addActionListener(e -> hienThi());
-        btnXoa.addActionListener(e -> xoaDong());
-        btnXoaHet.addActionListener(e -> { danhSach.clear(); tableModel.setRowCount(0); });
-        btnThoat.addActionListener(e -> System.exit(0));
-
-        JPanel pBtn = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 8));
-        pBtn.setOpaque(false);
-        for (JButton b : new JButton[]{btnThemCN, btnThemKT, btnHienThi, btnXoa, btnXoaHet, btnThoat})
-            pBtn.add(b);
-
-        // --- Bang ket qua ---
-        String[] cols = {"STT", "Ma so", "Ho ten", "Nganh", "Toan", "Mon2", "Mon3", "Tong diem", "Dang ky"};
-        tableModel = new DefaultTableModel(cols, 0) {
-            public boolean isCellEditable(int r, int c) { return false; }
-        };
-        table = new JTable(tableModel) {
-            // Zebra striping (mau xen ke hang)
+        // Event dong cua so bang xac nhan
+        addWindowListener(new WindowAdapter() {
             @Override
-            public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
-                Component c = super.prepareRenderer(renderer, row, col);
-                if (!isRowSelected(row)) {
-                    c.setBackground(row % 2 == 0
-                            ? Color.WHITE
-                            : new Color(235, 243, 255));
-                }
-                return c;
+            public void windowClosing(WindowEvent e) {
+                suKienKetThuc();
             }
-        };
-        table.setRowHeight(28);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        table.setShowVerticalLines(true);
-        table.setShowHorizontalLines(true);
-        table.setGridColor(new Color(180, 200, 230));
-        table.setIntercellSpacing(new Dimension(8, 4));
-        table.setSelectionBackground(new Color(144, 202, 249));
-        table.setSelectionForeground(Color.BLACK);
-        table.setFillsViewportHeight(true);
+        });
 
-        // Header dep
-        JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(new Color(13, 71, 161));
-        header.setForeground(Color.WHITE);
-        header.setPreferredSize(new Dimension(0, 32));
-        header.setReorderingAllowed(false);
+        // Background & Padding
+        JPanel pMain = new JPanel(new BorderLayout(10, 10));
+        pMain.setBorder(new EmptyBorder(10, 15, 15, 15));
+        pMain.setBackground(new Color(238, 238, 238));
 
-        // Do rong cot
-        int[] colWidths = {40, 80, 160, 100, 65, 65, 65, 85, 70};
-        for (int i = 0; i < colWidths.length; i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(colWidths[i]);
-        }
-        // Can giua cac cot so
-        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
-        centerRender.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i : new int[]{0, 4, 5, 6, 7, 8})
-            table.getColumnModel().getColumn(i).setCellRenderer(centerRender);
+        // 2. BANNER TIEU DE
+        JLabel lblHeader = new JLabel("CHƯƠNG TRÌNH TÍNH TIỀN BÁN SÁCH", SwingConstants.CENTER);
+        lblHeader.setFont(new Font("Arial", Font.BOLD, 18));
+        lblHeader.setOpaque(true);
+        lblHeader.setBackground(new Color(165, 214, 167)); // Mau xanh la nhat giong mau
+        lblHeader.setForeground(new Color(27, 94, 32));
+        lblHeader.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(76, 175, 80), 2),
+                new EmptyBorder(8, 0, 8, 0)
+        ));
 
-        JScrollPane sp = new JScrollPane(table);
-        sp.setBorder(BorderFactory.createCompoundBorder(
-                new EmptyBorder(6, 0, 0, 0),
-                BorderFactory.createTitledBorder(
-                        BorderFactory.createLineBorder(new Color(13, 71, 161), 2),
-                        "  Danh sach Thi sinh  ",
-                        TitledBorder.LEFT, TitledBorder.TOP,
-                        new Font("Segoe UI", Font.BOLD, 13),
-                        new Color(13, 71, 161))));
-        sp.getViewport().setBackground(Color.WHITE);
-        sp.setPreferredSize(new Dimension(0, 240));
+        // 3. GROUPBOX HOA DON
+        JPanel pHoaDon = createGroupPanel("Hóa Đơn:");
+        pHoaDon.setLayout(new GridBagLayout());
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = new Insets(6, 8, 6, 8);
+        g.anchor = GridBagConstraints.WEST;
 
-        // --- CENTER panel ---
-        JPanel pCenter = new JPanel(new BorderLayout(5, 5));
-        pCenter.setOpaque(false);
-        pCenter.setBorder(new EmptyBorder(0, 10, 0, 10));
-        pCenter.add(pInput, BorderLayout.NORTH);
-        pCenter.add(pBtn,   BorderLayout.CENTER);
-        pCenter.add(sp,     BorderLayout.SOUTH);
+        // Label + Controls Hoa Don
+        addLabel(pHoaDon, g, 0, "Tên Khách Hàng:");
+        g.gridx = 1; txtTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14)); pHoaDon.add(txtTenKH, g);
 
-        add(pCenter, BorderLayout.CENTER);
+        addLabel(pHoaDon, g, 1, "Số lượng Sách:");
+        g.gridx = 1; 
+        txtSoLuong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtSoLuong.setHorizontalAlignment(JTextField.RIGHT); // Canh le phai
+        pHoaDon.add(txtSoLuong, g);
 
-        setSize(860, 600);
+        addLabel(pHoaDon, g, 2, "Khách Hàng là SV:");
+        g.gridx = 1; chkLaSV.setOpaque(false); pHoaDon.add(chkLaSV, g);
+
+        addLabel(pHoaDon, g, 3, "Thành Tiền:");
+        g.gridx = 1; 
+        txtThanhTien.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        txtThanhTien.setHorizontalAlignment(JTextField.RIGHT); // Canh le phai
+        txtThanhTien.setEditable(false);
+        txtThanhTien.setBackground(new Color(245, 245, 245));
+        pHoaDon.add(txtThanhTien, g);
+
+        // 4. HANG NUT BUTTONS
+        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 10));
+        pButtons.setOpaque(false);
+        
+        styleButton(btnTinhTT);
+        styleButton(btnTiep);
+        styleButton(btnThongKe);
+        styleButton(btnKetThuc);
+
+        pButtons.add(btnTinhTT);
+        pButtons.add(btnTiep);
+        pButtons.add(btnThongKe);
+        pButtons.add(btnKetThuc);
+
+        // 5. GROUPBOX THONG KE
+        JPanel pThongKe = createGroupPanel("Thống kê:");
+        pThongKe.setLayout(new GridBagLayout());
+        GridBagConstraints g2 = new GridBagConstraints();
+        g2.insets = new Insets(6, 8, 6, 8);
+        g2.anchor = GridBagConstraints.WEST;
+
+        addLabel(pThongKe, g2, 0, "Tổng số KH:");
+        g2.gridx = 1; configStatField(txtTongKH); pThongKe.add(txtTongKH, g2);
+
+        addLabel(pThongKe, g2, 1, "Tổng số KH là SV:");
+        g2.gridx = 1; configStatField(txtTongKHSV); pThongKe.add(txtTongKHSV, g2);
+
+        addLabel(pThongKe, g2, 2, "Tổng doanh thu:");
+        g2.gridx = 1; configStatField(txtTongDoanhThu); pThongKe.add(txtTongDoanhThu, g2);
+
+        // Center Panel chua (Hoa Don + Buttons + Thong Ke)
+        JPanel pContent = new JPanel();
+        pContent.setLayout(new BoxLayout(pContent, BoxLayout.Y_AXIS));
+        pContent.setOpaque(false);
+        pContent.add(pHoaDon);
+        pContent.add(Box.createVerticalStrut(8));
+        pContent.add(pButtons);
+        pContent.add(Box.createVerticalStrut(8));
+        pContent.add(pThongKe);
+
+        pMain.add(lblHeader, BorderLayout.NORTH);
+        pMain.add(pContent, BorderLayout.CENTER);
+
+        add(pMain);
+
+        // gán phím Enter cho nút Tính TT
+        getRootPane().setDefaultButton(btnTinhTT);
+
+        // ===== GAN SU KIEN =====
+        btnTinhTT.addActionListener(e -> suKienTinhTT());
+        btnTiep.addActionListener(e -> suKienTiep());
+        btnThongKe.addActionListener(e -> suKienThongKe());
+        btnKetThuc.addActionListener(e -> suKienKetThuc());
+
+        pack();
+        // 6. Vi tri xuat hien ban dau cua form la giua man hinh
         setLocationRelativeTo(null);
         setResizable(false);
     }
 
     // =====================================================================
-    // PANEL THI SINH CONG NGHE
+    // XU LY SU KIEN
     // =====================================================================
-    private JPanel buildCNPanel() {
-        JPanel p = new JPanel(new GridBagLayout());
-        p.setBackground(new Color(232, 245, 233));
+
+    // 1. Nut Tinh TT
+    private void suKienTinhTT() {
+        String tenKH = txtTenKH.getText().trim();
+        if (tenKH.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tên khách hàng không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            txtTenKH.requestFocus();
+            return;
+        }
+
+        int soLuong = 0;
+        try {
+            soLuong = Integer.parseInt(txtSoLuong.getText().trim());
+            if (soLuong <= 0) {
+                JOptionPane.showMessageDialog(this, "Số lượng sách phải là số nguyên dương!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txtSoLuong.requestFocus();
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Số lượng sách phải là số nguyên dương hợp lệ!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            txtSoLuong.requestFocus();
+            return;
+        }
+
+        // Tinh thanh tien: Don gia 20000, SV duoc giam 5%
+        double thanhTien = soLuong * DON_GIA;
+        boolean laSV = chkLaSV.isSelected();
+        if (laSV) {
+            thanhTien *= 0.95; // Giam 5%
+        }
+
+        // Xuat ket qua len label Thanh tien
+        txtThanhTien.setText(df.format(thanhTien));
+
+        // Cap nhat du lieu thong ke
+        tongKHCount++;
+        if (laSV) tongKHSVCount++;
+        tongDoanhThuVal += thanhTien;
+    }
+
+    // 2. Nut Tiep
+    private void suKienTiep() {
+        txtTenKH.setText("");
+        txtSoLuong.setText("");
+        chkLaSV.setSelected(false);
+        txtThanhTien.setText("");
+        txtTenKH.requestFocus(); // Dat focus cho Textbox Ten Khach Hang
+    }
+
+    // 3. Nut Thong Ke
+    private void suKienThongKe() {
+        txtTongKH.setText(String.valueOf(tongKHCount));
+        txtTongKHSV.setText(String.valueOf(tongKHSVCount));
+        txtTongDoanhThu.setText(df.format(tongDoanhThuVal));
+    }
+
+    // 4. Nut Ket Thuc
+    private void suKienKetThuc() {
+        int ret = JOptionPane.showConfirmDialog(this,
+                "Bạn có thật sự muốn đóng ứng dụng không?",
+                "Xác nhận thoát",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (ret == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
+    // =====================================================================
+    // UI HELPERS
+    // =====================================================================
+    private JPanel createGroupPanel(String title) {
+        JPanel p = new JPanel();
+        p.setBackground(new Color(245, 245, 245));
         p.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(27, 94, 32), 2),
-                "Khu vuc: Thi sinh Cong nghe",
-                TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 13), new Color(27, 94, 32)));
-
-        GridBagConstraints g = gbc();
-        int r = 0;
-        addRow(p, g, r++, "Ma so:",         cnMaSo);
-        addRow(p, g, r++, "Ho ten:",         cnHoTen);
-        addRow(p, g, r++, "Diem Toan:",      cnToan);
-        addRow(p, g, r++, "Diem Ly:",        cnLy);
-        addRow(p, g, r++, "Diem Hoa:",       cnHoa);
-
-        // RadioButton
-        g.gridx = 0; g.gridy = r;
-        p.add(new JLabel("Dang ky:"), g);
-        g.gridx = 1; cnDangKy.setOpaque(false);
-        p.add(cnDangKy, g); r++;
-
-        // ComboBox
-        addComboRow(p, g, r, "Nganh CN:", cnNganh);
+                BorderFactory.createLineBorder(new Color(150, 150, 150), 1),
+                title, TitledBorder.LEFT, TitledBorder.TOP,
+                new Font("Segoe UI", Font.BOLD, 13), Color.BLACK
+        ));
         return p;
     }
 
-    // =====================================================================
-    // PANEL THI SINH KINH TE
-    // =====================================================================
-    private JPanel buildKTPanel() {
-        JPanel p = new JPanel(new GridBagLayout());
-        p.setBackground(new Color(227, 242, 253));
-        p.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(1, 87, 155), 2),
-                "Khu vuc: Thi sinh Kinh te",
-                TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 13), new Color(1, 87, 155)));
-
-        GridBagConstraints g = gbc();
-        int r = 0;
-        addRow(p, g, r++, "Ma so:",    ktMaSo);
-        addRow(p, g, r++, "Ho ten:",   ktHoTen);
-        addRow(p, g, r++, "Diem Toan:",ktToan);
-        addRow(p, g, r++, "Diem Van:", ktVan);
-        addRow(p, g, r++, "Diem Anh:", ktAnh);
-
-        g.gridx = 0; g.gridy = r;
-        p.add(new JLabel("Dang ky:"), g);
-        g.gridx = 1; ktDangKy.setOpaque(false);
-        p.add(ktDangKy, g); r++;
-
-        addComboRow(p, g, r, "Nganh KT:", ktNganh);
-        return p;
+    private void addLabel(JPanel p, GridBagConstraints g, int row, String text) {
+        g.gridx = 0; g.gridy = row;
+        JLabel lbl = new JLabel(text);
+        lbl.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        p.add(lbl, g);
     }
 
-    // =====================================================================
-    // THEM / HIEN THI / XOA
-    // =====================================================================
-    private void themCongNghe() {
-        try {
-            String ms = cnMaSo.getText().trim();
-            String ht = cnHoTen.getText().trim();
-            if (ms.isEmpty() || ht.isEmpty()) throw new Exception("Vui long nhap ma so va ho ten!");
-            double toan = parseDiem(cnToan.getText(), "Toan");
-            double ly   = parseDiem(cnLy.getText(),   "Ly");
-            double hoa  = parseDiem(cnHoa.getText(),  "Hoa");
-            double tong = toan + ly + hoa;
-            String nganh = (String) cnNganh.getSelectedItem();
-            String dk = cnDangKy.isSelected() ? "Co" : "Chua";
-            int stt = danhSach.size() + 1;
-            danhSach.add(new String[]{String.valueOf(stt), ms, ht, nganh,
-                    df(toan), df(ly), df(hoa), df(tong), dk});
-            tableModel.addRow(new Object[]{stt, ms, ht, nganh,
-                    df(toan), df(ly), df(hoa), df(tong), dk});
-            xoaNhapCN();
-            JOptionPane.showMessageDialog(this, "Da them: " + ht + " [CongNghe]", "Thanh cong", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Loi nhap lieu", JOptionPane.ERROR_MESSAGE);
-        }
+    private void configStatField(JTextField tf) {
+        tf.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        tf.setHorizontalAlignment(JTextField.RIGHT); // Canh le phai cho so lieu
+        tf.setEditable(false);
+        tf.setBackground(new Color(240, 240, 240));
     }
 
-    private void themKinhTe() {
-        try {
-            String ms = ktMaSo.getText().trim();
-            String ht = ktHoTen.getText().trim();
-            if (ms.isEmpty() || ht.isEmpty()) throw new Exception("Vui long nhap ma so va ho ten!");
-            double toan = parseDiem(ktToan.getText(), "Toan");
-            double van  = parseDiem(ktVan.getText(),  "Van");
-            double anh  = parseDiem(ktAnh.getText(),  "Anh");
-            double tong = toan + van + anh;
-            String nganh = (String) ktNganh.getSelectedItem();
-            String dk = ktDangKy.isSelected() ? "Co" : "Chua";
-            int stt = danhSach.size() + 1;
-            danhSach.add(new String[]{String.valueOf(stt), ms, ht, nganh,
-                    df(toan), df(van), df(anh), df(tong), dk});
-            tableModel.addRow(new Object[]{stt, ms, ht, nganh,
-                    df(toan), df(van), df(anh), df(tong), dk});
-            xoaNhapKT();
-            JOptionPane.showMessageDialog(this, "Da them: " + ht + " [KinhTe]", "Thanh cong", JOptionPane.INFORMATION_MESSAGE);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Loi nhap lieu", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void hienThi() {
-        tableModel.setRowCount(0);
-        for (String[] row : danhSach)
-            tableModel.addRow(row);
-        JOptionPane.showMessageDialog(this,
-                "Tong so thi sinh: " + danhSach.size(), "Hien thi", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void xoaDong() {
-        int row = table.getSelectedRow();
-        if (row < 0) { JOptionPane.showMessageDialog(this, "Chon dong can xoa!", "Canh bao", JOptionPane.WARNING_MESSAGE); return; }
-        danhSach.remove(row);
-        tableModel.removeRow(row);
-    }
-
-    private void xoaNhapCN() {
-        cnMaSo.setText(""); cnHoTen.setText("");
-        cnToan.setText(""); cnLy.setText(""); cnHoa.setText("");
-        cnDangKy.setSelected(false); cnNganh.setSelectedIndex(0);
-    }
-
-    private void xoaNhapKT() {
-        ktMaSo.setText(""); ktHoTen.setText("");
-        ktToan.setText(""); ktVan.setText(""); ktAnh.setText("");
-        ktDangKy.setSelected(false); ktNganh.setSelectedIndex(0);
-    }
-
-    // =====================================================================
-    // HELPERS
-    // =====================================================================
-    private double parseDiem(String s, String mon) throws Exception {
-        try {
-            double d = Double.parseDouble(s.trim());
-            if (d < 0 || d > 10) throw new Exception("Diem " + mon + " phai tu 0 den 10!");
-            return d;
-        } catch (NumberFormatException e) {
-            throw new Exception("Diem " + mon + " phai la so!");
-        }
-    }
-
-    private String df(double v) { return String.format("%.1f", v); }
-
-    private GridBagConstraints gbc() {
-        GridBagConstraints g = new GridBagConstraints();
-        g.insets = new Insets(5, 8, 5, 8);
-        g.anchor = GridBagConstraints.WEST;
-        return g;
-    }
-
-    private void addRow(JPanel p, GridBagConstraints g, int row, String lbl, JTextField tf) {
-        g.gridx = 0; g.gridy = row; p.add(new JLabel(lbl), g);
-        g.gridx = 1; p.add(tf, g);
-    }
-
-    private void addComboRow(JPanel p, GridBagConstraints g, int row, String lbl, JComboBox<String> cb) {
-        g.gridx = 0; g.gridy = row; p.add(new JLabel(lbl), g);
-        g.gridx = 1; p.add(cb, g);
-    }
-
-    private void styleBtn(JButton b, Color bg) {
-        b.setBackground(bg);
-        b.setForeground(Color.WHITE);
-        b.setFont(new Font("Arial", Font.BOLD, 12));
+    private void styleButton(JButton b) {
+        b.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        b.setPreferredSize(new Dimension(95, 30));
         b.setFocusPainted(false);
-        b.setBorderPainted(false);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        b.setPreferredSize(new Dimension(100, 32));
     }
 
-    // =====================================================================
-    // MAIN
-    // =====================================================================
     public static void main(String[] args) {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-        catch (Exception ignored) {}
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
         SwingUtilities.invokeLater(() -> new Buoi8().setVisible(true));
     }
 }
