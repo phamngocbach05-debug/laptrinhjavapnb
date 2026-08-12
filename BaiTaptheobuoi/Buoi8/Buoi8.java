@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing)
- * Thiet ke theo giao dien khu vuc nhap + nut + khu vuc thong ke
+ * Dua dung tren cac thuoc tinh va nghiep vu cua Buoi 3, Buoi 5, Buoi 7 (KHONG THEM THUOC TINH KHAC)
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -29,11 +29,10 @@ public class Buoi8 extends JFrame {
     private JTextField txtDiem2 = new JTextField(18);
     private JTextField txtDiem3 = new JTextField(18);
     
-    private JCheckBox chkDangKy = new JCheckBox("Đã đăng ký dự thi");
     private JTextField txtTongDiem = new JTextField(18);
 
     // ===== CÁC NÚT THAO TÁC =====
-    private JButton btnTinhDiem = new JButton("Tính TT");
+    private JButton btnTinhTT = new JButton("Tính TT");
     private JButton btnTiep = new JButton("Tiếp");
     private JButton btnThongKe = new JButton("Thống Kê");
     private JButton btnKetThuc = new JButton("Kết Thúc");
@@ -51,7 +50,7 @@ public class Buoi8 extends JFrame {
     private DecimalFormat df = new DecimalFormat("#,##0.00");
 
     public Buoi8() {
-        // 1. Tiêu đề Form đúng định dạng yêu cầu
+        // 1. Tiêu đề Form đúng yêu cầu
         setTitle("Quản Lý Thí Sinh (Phạm Ngọc Bách – 2351170576)");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
@@ -86,7 +85,7 @@ public class Buoi8 extends JFrame {
         g.insets = new Insets(5, 8, 5, 8);
         g.anchor = GridBagConstraints.WEST;
 
-        addLabel(pThongTin, g, 0, "Mã Số Thí Sinh:");
+        addLabel(pThongTin, g, 0, "Mã Số:");
         g.gridx = 1; txtMaSo.setFont(new Font("Segoe UI", Font.PLAIN, 13)); pThongTin.add(txtMaSo, g);
 
         addLabel(pThongTin, g, 1, "Họ và Tên:");
@@ -105,13 +104,10 @@ public class Buoi8 extends JFrame {
         g.gridx = 0; g.gridy = 5; pThongTin.add(lblMon3, g);
         g.gridx = 1; configNumberInput(txtDiem3); pThongTin.add(txtDiem3, g);
 
-        addLabel(pThongTin, g, 6, "Trạng thái:");
-        g.gridx = 1; chkDangKy.setOpaque(false); chkDangKy.setSelected(true); pThongTin.add(chkDangKy, g);
-
-        addLabel(pThongTin, g, 7, "Tổng Điểm:");
+        addLabel(pThongTin, g, 6, "Thành Tiền (Tổng Điểm):");
         g.gridx = 1; configReadOnlyNumber(txtTongDiem); pThongTin.add(txtTongDiem, g);
 
-        // Đổi tên môn học linh hoạt theo Loại Thí sinh
+        // Đổi tên môn học linh hoạt khi chuyển đổi loại thí sinh
         cbLoaiTS.addActionListener(e -> {
             if (cbLoaiTS.getSelectedIndex() == 0) { // Công nghệ
                 lblMon1.setText("Điểm Toán:");
@@ -124,15 +120,15 @@ public class Buoi8 extends JFrame {
             }
         });
 
-        // 4. HÀNG NÚT THAO TÁC
+        // 4. HÀNG NÚT THAO TÁC (Tính TT, Tiếp, Thống Kê, Kết Thúc)
         JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
         pButtons.setOpaque(false);
-        styleButton(btnTinhDiem);
+        styleButton(btnTinhTT);
         styleButton(btnTiep);
         styleButton(btnThongKe);
         styleButton(btnKetThuc);
 
-        pButtons.add(btnTinhDiem);
+        pButtons.add(btnTinhTT);
         pButtons.add(btnTiep);
         pButtons.add(btnThongKe);
         pButtons.add(btnKetThuc);
@@ -144,7 +140,7 @@ public class Buoi8 extends JFrame {
         g2.insets = new Insets(5, 8, 5, 8);
         g2.anchor = GridBagConstraints.WEST;
 
-        addLabel(pThongKe, g2, 0, "Tổng số Thí sinh:");
+        addLabel(pThongKe, g2, 0, "Tổng số KH (Thí sinh):");
         g2.gridx = 1; configReadOnlyNumber(txtTongSoTS); pThongKe.add(txtTongSoTS, g2);
 
         addLabel(pThongKe, g2, 1, "Số TS Công nghệ:");
@@ -156,8 +152,8 @@ public class Buoi8 extends JFrame {
         addLabel(pThongKe, g2, 3, "Điểm TB Chung:");
         g2.gridx = 1; configReadOnlyNumber(txtDiemTrungBinh); pThongKe.add(txtDiemTrungBinh, g2);
 
-        // 6. BẢNG HIỂN THỊ DANH SÁCH DƯỚI CÙNG
-        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại TS", "Môn 1", "Môn 2", "Môn 3", "Tổng Điểm", "Đăng ký"};
+        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH
+        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại TS", "Môn 1", "Môn 2", "Môn 3", "Tổng Điểm"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
@@ -181,7 +177,7 @@ public class Buoi8 extends JFrame {
         // Căn giữa các cột số
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i : new int[]{0, 1, 4, 5, 6, 7, 8}) {
+        for (int i : new int[]{0, 1, 4, 5, 6, 7}) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
 
@@ -206,10 +202,10 @@ public class Buoi8 extends JFrame {
         add(pMain);
 
         // Phím Enter nhận sự kiện nút "Tính TT"
-        getRootPane().setDefaultButton(btnTinhDiem);
+        getRootPane().setDefaultButton(btnTinhTT);
 
         // ===== GÁN SỰ KIỆN NÚT =====
-        btnTinhDiem.addActionListener(e -> suKienTinhDiem());
+        btnTinhTT.addActionListener(e -> suKienTinhTT());
         btnTiep.addActionListener(e -> suKienTiep());
         btnThongKe.addActionListener(e -> suKienThongKe());
         btnKetThuc.addActionListener(e -> suKienKetThuc());
@@ -225,7 +221,7 @@ public class Buoi8 extends JFrame {
     // =====================================================================
 
     // 1. Nút "Tính TT" (Thêm & Tính điểm thí sinh)
-    private void suKienTinhDiem() {
+    private void suKienTinhTT() {
         String ms = txtMaSo.getText().trim();
         String ht = txtHoTen.getText().trim();
 
@@ -236,7 +232,7 @@ public class Buoi8 extends JFrame {
         }
 
         if (ht.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Họ tên thí sinh không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tên Khách hàng (Họ tên thí sinh) không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
             txtHoTen.requestFocus();
             return;
         }
@@ -254,20 +250,19 @@ public class Buoi8 extends JFrame {
         txtTongDiem.setText(df.format(tongDiem));
 
         String loaiTS = (String) cbLoaiTS.getSelectedItem();
-        String dangKy = chkDangKy.isSelected() ? "Đã ĐK" : "Chưa ĐK";
         int stt = danhSachTS.size() + 1;
 
         String[] row = new String[]{
                 String.valueOf(stt), ms, ht, loaiTS,
                 df.format(d1), df.format(d2), df.format(d3),
-                df.format(tongDiem), dangKy
+                df.format(tongDiem)
         };
 
         danhSachTS.add(row);
         tableModel.addRow(row);
     }
 
-    // 2. Nút "Tiếp" (Xóa trắng hóa đơn/thông tin và focus vào Mã số)
+    // 2. Nút "Tiếp" (Xóa nội dung trong Hóa Đơn / Thông tin và đặt focus cho Textbox Tên/Mã)
     private void suKienTiep() {
         txtMaSo.setText("");
         txtHoTen.setText("");
@@ -275,12 +270,11 @@ public class Buoi8 extends JFrame {
         txtDiem2.setText("");
         txtDiem3.setText("");
         txtTongDiem.setText("");
-        chkDangKy.setSelected(true);
         cbLoaiTS.setSelectedIndex(0);
-        txtMaSo.requestFocus(); // Đặt focus vào ô Mã Số Thí Sinh
+        txtMaSo.requestFocus(); // Đặt focus cho Textbox Mã số / Họ tên
     }
 
-    // 3. Nút "Thống Kê" (Tính toán và xuất kết quả thống kê)
+    // 3. Nút "Thống Kê" (Tính và hiển thị kết quả trên các ô trong groupbox Thống kê)
     private void suKienThongKe() {
         int tongSo = danhSachTS.size();
         int cnCount = 0;
@@ -307,10 +301,10 @@ public class Buoi8 extends JFrame {
         }
     }
 
-    // 4. Nút "Kết Thúc" (Xác nhận thoát)
+    // 4. Nút "Kết Thúc" (Phát sinh messageBox hỏi người dùng có thật sự muốn đóng ứng dụng hay không)
     private void suKienKetThuc() {
         int ret = JOptionPane.showConfirmDialog(this,
-                "Bạn có thật sự muốn đóng ứng dụng không?",
+                "Bạn có thật sự muốn đóng ứng dụng hay không?",
                 "Xác nhận thoát",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
@@ -326,13 +320,13 @@ public class Buoi8 extends JFrame {
         try {
             double d = Double.parseDouble(tf.getText().trim());
             if (d < 0 || d > 10) {
-                JOptionPane.showMessageDialog(this, tenMon.replace(":", "") + " phải từ 0 đến 10!", "Lỗi điểm số", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, tenMon.replace(":", "") + " phải là số dương từ 0 đến 10!", "Lỗi nhập điểm", JOptionPane.ERROR_MESSAGE);
                 tf.requestFocus();
                 return -1;
             }
             return d;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, tenMon.replace(":", "") + " phải là số hợp lệ!", "Lỗi điểm số", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, tenMon.replace(":", "") + " phải là số hợp lệ!", "Lỗi nhập điểm", JOptionPane.ERROR_MESSAGE);
             tf.requestFocus();
             return -1;
         }
