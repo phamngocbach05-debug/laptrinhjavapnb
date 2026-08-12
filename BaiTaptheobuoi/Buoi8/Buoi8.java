@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing)
- * Dua dung tren thuoc tinh cua ThiSinh tu Buoi 3/5/7 (Bo 'Thanh tien')
+ * Hien thi ro rang cot STT va tat ca cac cot trong JTable khong bi che/an
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -69,7 +69,7 @@ public class Buoi8 extends JFrame {
         JLabel lblHeader = new JLabel("CHƯƠNG TRÌNH QUẢN LÝ THÍ SINH", SwingConstants.CENTER);
         lblHeader.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblHeader.setOpaque(true);
-        lblHeader.setBackground(new Color(165, 214, 167)); // Màu xanh lá gống mẫu
+        lblHeader.setBackground(new Color(165, 214, 167)); // Màu xanh lá giống mẫu
         lblHeader.setForeground(new Color(27, 94, 32));
         lblHeader.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(76, 175, 80), 2),
@@ -135,7 +135,7 @@ public class Buoi8 extends JFrame {
         g2.insets = new Insets(5, 8, 5, 8);
         g2.anchor = GridBagConstraints.WEST;
 
-        addLabel(pThongKe, g2, 0, "Tổng số Thí sinh:");
+        addLabel(pThongKe, g2, 0, "Tổng số KH (Thí sinh):");
         g2.gridx = 1; configReadOnlyNumber(txtTongSoTS); pThongKe.add(txtTongSoTS, g2);
 
         addLabel(pThongKe, g2, 1, "Số TS Công nghệ:");
@@ -147,38 +147,59 @@ public class Buoi8 extends JFrame {
         addLabel(pThongKe, g2, 3, "Điểm TB Chung:");
         g2.gridx = 1; configReadOnlyNumber(txtDiemTrungBinh); pThongKe.add(txtDiemTrungBinh, g2);
 
-        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH
-        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại TS", "Môn 1", "Môn 2", "Môn 3", "Tổng Điểm"};
+        // 6. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH (HIỂN THỊ RÕ RÀNG TẤT CẢ CÁC CỘT & STT)
+        String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Điểm 1", "Điểm 2", "Điểm 3", "Tổng Điểm"};
         tableModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
         };
+        
         table = new JTable(tableModel) {
             @Override
             public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
                 Component c = super.prepareRenderer(renderer, row, col);
                 if (!isRowSelected(row)) {
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(235, 243, 255));
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : new Color(238, 244, 255));
                 }
                 return c;
             }
         };
-        table.setRowHeight(26);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
-        table.getTableHeader().setBackground(new Color(27, 94, 32));
-        table.getTableHeader().setForeground(Color.WHITE);
         
-        // Căn giữa các cột số
+        table.setRowHeight(28);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        
+        JTableHeader header = table.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        header.setBackground(new Color(27, 94, 32));
+        header.setForeground(Color.WHITE);
+        header.setPreferredSize(new Dimension(0, 32));
+        header.setReorderingAllowed(false);
+
+        // Đặt độ rộng chuẩn cho từng cột để không bị ẩn / che lấp
+        int[] columnWidths = {50, 95, 185, 150, 75, 75, 75, 95};
+        for (int i = 0; i < columnWidths.length; i++) {
+            TableColumn col = table.getColumnModel().getColumn(i);
+            col.setPreferredWidth(columnWidths[i]);
+            col.setMinWidth(columnWidths[i] - 15);
+        }
+
+        // Căn giữa STT và các cột số liệu
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i : new int[]{0, 1, 4, 5, 6, 7}) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
 
-        JScrollPane spTable = new JScrollPane(table);
-        spTable.setPreferredSize(new Dimension(0, 160));
-        spTable.setBorder(BorderFactory.createTitledBorder("Danh sách Thí sinh đã nhập"));
+        table.setFillsViewportHeight(true);
+
+        JScrollPane spTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        spTable.setPreferredSize(new Dimension(800, 170));
+        spTable.setBorder(BorderFactory.createTitledBorder(
+                BorderFactory.createLineBorder(new Color(27, 94, 32), 1),
+                "Danh sách Thí sinh đã nhập",
+                TitledBorder.LEFT, TitledBorder.TOP,
+                new Font("Segoe UI", Font.BOLD, 13), new Color(27, 94, 32)
+        ));
 
         // Gom các phần lại
         JPanel pTopContent = new JPanel();
@@ -263,7 +284,7 @@ public class Buoi8 extends JFrame {
         txtDiem2.setText("");
         txtDiem3.setText("");
         cbLoaiTS.setSelectedIndex(0);
-        txtMaSo.requestFocus(); // Đặt focus cho Textbox Mã số / Họ tên
+        txtMaSo.requestFocus(); // Đặt focus cho Textbox Mã số
     }
 
     // 3. Nút "Thống Kê" (Tính và hiển thị kết quả trên các ô trong groupbox Thống kê)
