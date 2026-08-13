@@ -7,9 +7,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
- * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing)
- * Fix triet de loi header bi an/trang tren Look & Feel Windows.
- * Hien thi RO RANG 100% tieu de tat ca cac cot ngay khi mo app.
+ * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing Don Giam)
+ * Không cần nút 'Tạo bảng' và 'Kết thúc'.
+ * Nhập xong chỉ cần bấm nút 'Thống Kê' (hoặc Enter) là tự động:
+ *   1. Kiểm tra & Thêm thí sinh vào danh sách / bảng.
+ *   2. Tự động tính toán & cập nhật khung Thống kê.
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -31,10 +33,8 @@ public class Buoi8 extends JFrame {
     private JTextField txtDiem3 = new JTextField(20);
 
     // ===== CÁC NÚT THAO TÁC =====
-    private JButton btnTaoBang = new JButton("Tạo bảng");
-    private JButton btnTiep = new JButton("Tiếp");
     private JButton btnThongKe = new JButton("Thống Kê");
-    private JButton btnKetThuc = new JButton("Kết Thúc");
+    private JButton btnTiep = new JButton("Tiếp");
 
     // ===== KHU VUC THONG KE =====
     private JTextField txtTongSoTS = new JTextField(20);
@@ -51,16 +51,8 @@ public class Buoi8 extends JFrame {
     public Buoi8() {
         // 1. Tiêu đề Form đúng yêu cầu
         setTitle("Quản Lý Thí Sinh (Phạm Ngọc Bách – 2351170576)");
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-
-        // Sự kiện đóng cửa sổ với xác nhận
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                suKienKetThuc();
-            }
-        });
 
         JPanel pMain = new JPanel(new BorderLayout(10, 10));
         pMain.setBorder(new EmptyBorder(10, 15, 15, 15));
@@ -70,7 +62,7 @@ public class Buoi8 extends JFrame {
         JLabel lblHeader = new JLabel("CHƯƠNG TRÌNH QUẢN LÝ THÍ SINH", SwingConstants.CENTER);
         lblHeader.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblHeader.setOpaque(true);
-        lblHeader.setBackground(new Color(165, 214, 167)); // Màu xanh lá giống mẫu
+        lblHeader.setBackground(new Color(165, 214, 167)); // Màu xanh lá gống mẫu
         lblHeader.setForeground(new Color(27, 94, 32));
         lblHeader.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(76, 175, 80), 2),
@@ -116,18 +108,14 @@ public class Buoi8 extends JFrame {
             }
         });
 
-        // 4. HÀNG NÚT THAO TÁC (Tạo bảng, Tiếp, Thống Kê, Kết Thúc)
-        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 8));
+        // 4. HÀNG NÚT THAO TÁC (Chỉ gồm Thống Kê & Tiếp)
+        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 8));
         pButtons.setOpaque(false);
-        styleButton(btnTaoBang);
-        styleButton(btnTiep);
-        styleButton(btnThongKe);
-        styleButton(btnKetThuc);
+        styleButton(btnThongKe, new Color(27, 94, 32));
+        styleButton(btnTiep, new Color(21, 101, 192));
 
-        pButtons.add(btnTaoBang);
-        pButtons.add(btnTiep);
         pButtons.add(btnThongKe);
-        pButtons.add(btnKetThuc);
+        pButtons.add(btnTiep);
 
         // 5. GROUPBOX THỐNG KÊ
         JPanel pThongKe = createGroupPanel("Thống kê:");
@@ -136,7 +124,7 @@ public class Buoi8 extends JFrame {
         g2.insets = new Insets(5, 8, 5, 8);
         g2.anchor = GridBagConstraints.WEST;
 
-        addLabel(pThongKe, g2, 0, "Tổng số KH (Thí sinh):");
+        addLabel(pThongKe, g2, 0, "Tổng số Thí sinh:");
         g2.gridx = 1; configReadOnlyNumber(txtTongSoTS); pThongKe.add(txtTongSoTS, g2);
 
         addLabel(pThongKe, g2, 1, "Số TS Công nghệ:");
@@ -169,7 +157,7 @@ public class Buoi8 extends JFrame {
         table.setRowHeight(28);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
-        // RENDERER RIÊNG CHO TIÊU ĐỀ BẢNG (FIX LỖI HIỂN THỊ HEADER TRÊN WINDOWS)
+        // Custom Header Renderer
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(0, 32));
         header.setReorderingAllowed(false);
@@ -180,8 +168,8 @@ public class Buoi8 extends JFrame {
                 JLabel label = new JLabel(value.toString(), SwingConstants.CENTER);
                 label.setFont(new Font("Segoe UI", Font.BOLD, 13));
                 label.setOpaque(true);
-                label.setBackground(new Color(27, 94, 32)); // Màu xanh đậm gống header
-                label.setForeground(Color.WHITE);          // Chữ trắng nét đậm
+                label.setBackground(new Color(27, 94, 32));
+                label.setForeground(Color.WHITE);
                 label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(200, 200, 200)));
                 return label;
             }
@@ -228,17 +216,14 @@ public class Buoi8 extends JFrame {
 
         add(pMain);
 
-        // Phím Enter nhận sự kiện nút "Tạo bảng"
-        getRootPane().setDefaultButton(btnTaoBang);
+        // Phím Enter gán mặc định cho nút "Thống Kê"
+        getRootPane().setDefaultButton(btnThongKe);
 
         // ===== GÁN SỰ KIỆN NÚT =====
-        btnTaoBang.addActionListener(e -> suKienTaoBang());
+        btnThongKe.addActionListener(e -> suKienThongKeVaThem());
         btnTiep.addActionListener(e -> suKienTiep());
-        btnThongKe.addActionListener(e -> suKienThongKe());
-        btnKetThuc.addActionListener(e -> suKienKetThuc());
 
         pack();
-        // Vị trí ban đầu là giữa màn hình
         setLocationRelativeTo(null);
         setResizable(false);
     }
@@ -247,59 +232,54 @@ public class Buoi8 extends JFrame {
     // XỬ LÝ SỰ KIỆN THAO TÁC
     // =====================================================================
 
-    // 1. Nút "Tạo bảng" (Thêm dữ liệu thí sinh vào bảng)
-    private void suKienTaoBang() {
+    // Khi bấm "Thống Kê" (hoặc phím Enter): Tự động kiểm tra + Thêm vào bảng + Thống kê tổng hợp
+    private void suKienThongKeVaThem() {
         String ms = txtMaSo.getText().trim();
         String ht = txtHoTen.getText().trim();
 
-        if (ms.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Mã số thí sinh không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
-            txtMaSo.requestFocus();
-            return;
+        // Nếu người dùng đã nhập dữ liệu mới -> Thêm vào bảng
+        if (!ms.isEmpty() || !ht.isEmpty()) {
+            if (ms.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Mã số thí sinh không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txtMaSo.requestFocus();
+                return;
+            }
+
+            if (ht.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Họ tên thí sinh không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+                txtHoTen.requestFocus();
+                return;
+            }
+
+            double d1 = docDiem(txtDiem1, lblMon1.getText());
+            if (d1 < 0) return;
+
+            double d2 = docDiem(txtDiem2, lblMon2.getText());
+            if (d2 < 0) return;
+
+            double d3 = docDiem(txtDiem3, lblMon3.getText());
+            if (d3 < 0) return;
+
+            double tongDiem = d1 + d2 + d3;
+            String loaiTS = (String) cbLoaiTS.getSelectedItem();
+            int stt = danhSachTS.size() + 1;
+
+            String[] row = new String[]{
+                    String.valueOf(stt), ms, ht, loaiTS,
+                    df.format(d1), df.format(d2), df.format(d3),
+                    df.format(tongDiem)
+            };
+
+            danhSachTS.add(row);
+            tableModel.addRow(row);
         }
 
-        if (ht.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Họ tên thí sinh không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
-            txtHoTen.requestFocus();
-            return;
-        }
-
-        double d1 = docDiem(txtDiem1, lblMon1.getText());
-        if (d1 < 0) return;
-
-        double d2 = docDiem(txtDiem2, lblMon2.getText());
-        if (d2 < 0) return;
-
-        double d3 = docDiem(txtDiem3, lblMon3.getText());
-        if (d3 < 0) return;
-
-        double tongDiem = d1 + d2 + d3;
-        String loaiTS = (String) cbLoaiTS.getSelectedItem();
-        int stt = danhSachTS.size() + 1;
-
-        String[] row = new String[]{
-                String.valueOf(stt), ms, ht, loaiTS,
-                df.format(d1), df.format(d2), df.format(d3),
-                df.format(tongDiem)
-        };
-
-        danhSachTS.add(row);
-        tableModel.addRow(row);
+        // Tự động tính toán & cập nhật ô Thống kê ngay lập tức
+        capNhatThongKe();
     }
 
-    // 2. Nút "Tiếp" (Xóa nội dung nhập liệu và đặt focus vào ô Mã số)
-    private void suKienTiep() {
-        txtMaSo.setText("");
-        txtHoTen.setText("");
-        txtDiem1.setText("");
-        txtDiem2.setText("");
-        txtDiem3.setText("");
-        cbLoaiTS.setSelectedIndex(0);
-        txtMaSo.requestFocus(); // Đặt focus cho Textbox Mã số
-    }
-
-    // 3. Nút "Thống Kê" (Tính và hiển thị kết quả trên các ô trong groupbox Thống kê)
-    private void suKienThongKe() {
+    // Tự động tính các con số thống kê
+    private void capNhatThongKe() {
         int tongSo = danhSachTS.size();
         int cnCount = 0;
         int ktCount = 0;
@@ -325,16 +305,15 @@ public class Buoi8 extends JFrame {
         }
     }
 
-    // 4. Nút "Kết Thúc" (Phát sinh messageBox hỏi người dùng có thật sự muốn đóng ứng dụng hay không)
-    private void suKienKetThuc() {
-        int ret = JOptionPane.showConfirmDialog(this,
-                "Bạn có thật sự muốn đóng ứng dụng hay không?",
-                "Xác nhận thoát",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        if (ret == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        }
+    // Nút "Tiếp" (Xóa ô nhập liệu để nhập thí sinh kế tiếp)
+    private void suKienTiep() {
+        txtMaSo.setText("");
+        txtHoTen.setText("");
+        txtDiem1.setText("");
+        txtDiem2.setText("");
+        txtDiem3.setText("");
+        cbLoaiTS.setSelectedIndex(0);
+        txtMaSo.requestFocus();
     }
 
     // =====================================================================
@@ -376,20 +355,24 @@ public class Buoi8 extends JFrame {
 
     private void configNumberInput(JTextField tf) {
         tf.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        tf.setHorizontalAlignment(JTextField.RIGHT); // Canh lề phải số liệu
+        tf.setHorizontalAlignment(JTextField.RIGHT);
     }
 
     private void configReadOnlyNumber(JTextField tf) {
         tf.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tf.setHorizontalAlignment(JTextField.RIGHT); // Canh lề phải số liệu
+        tf.setHorizontalAlignment(JTextField.RIGHT);
         tf.setEditable(false);
         tf.setBackground(new Color(240, 240, 240));
     }
 
-    private void styleButton(JButton b) {
-        b.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        b.setPreferredSize(new Dimension(100, 32));
+    private void styleButton(JButton b, Color bg) {
+        b.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        b.setBackground(bg);
+        b.setForeground(Color.WHITE);
+        b.setPreferredSize(new Dimension(110, 32));
         b.setFocusPainted(false);
+        b.setBorderPainted(false);
+        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     public static void main(String[] args) {
