@@ -7,10 +7,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
- * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing Sieu Gọn)
- * - Bo hoàn toàn khung Thống kê.
- * - Thay nút Thống kê thành nút 'Hoàn thành'.
- * - Nhập xong bấm 'Hoàn thành' (hoặc Enter) là hiển thị thí sinh lên Bảng danh sách.
+ * Buoi 8 - CHUONG TRINH QUAN LY THI SINH (GUI Swing Day Du)
+ * Chuc nang: Hoan thanh, Them, Sua, Xoa thi sinh tren JTable
  * Sinh vien: Pham Ngoc Bach - MSSV: 2351170576
  */
 public class Buoi8 extends JFrame {
@@ -33,7 +31,9 @@ public class Buoi8 extends JFrame {
 
     // ===== CÁC NÚT THAO TÁC =====
     private JButton btnHoanThanh = new JButton("Hoàn thành");
-    private JButton btnTiep = new JButton("Tiếp");
+    private JButton btnThem = new JButton("Thêm");
+    private JButton btnSua = new JButton("Sửa");
+    private JButton btnXoa = new JButton("Xóa");
 
     // ===== BẢNG HIỂN THỊ DANH SÁCH =====
     private DefaultTableModel tableModel;
@@ -101,14 +101,18 @@ public class Buoi8 extends JFrame {
             }
         });
 
-        // 4. HÀNG NÚT THAO TÁC (Chỉ gồm Hoàn thành & Tiếp)
-        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 10));
+        // 4. HÀNG NÚT THAO TÁC (Hoàn thành, Thêm, Sửa, Xóa)
+        JPanel pButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         pButtons.setOpaque(false);
         styleButton(btnHoanThanh, new Color(27, 94, 32));
-        styleButton(btnTiep, new Color(21, 101, 192));
+        styleButton(btnThem, new Color(21, 101, 192));
+        styleButton(btnSua, new Color(230, 81, 0));
+        styleButton(btnXoa, new Color(183, 28, 28));
 
         pButtons.add(btnHoanThanh);
-        pButtons.add(btnTiep);
+        pButtons.add(btnThem);
+        pButtons.add(btnSua);
+        pButtons.add(btnXoa);
 
         // 5. BẢNG HIỂN THỊ DANH SÁCH THÍ SINH
         String[] cols = {"STT", "Mã Số", "Họ và Tên", "Loại Thí Sinh", "Điểm 1", "Điểm 2", "Điểm 3", "Tổng Điểm"};
@@ -131,7 +135,7 @@ public class Buoi8 extends JFrame {
         table.setRowHeight(28);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 
-        // Custom Header Renderer (Fix lỗi chữ trắng trên Windows)
+        // Custom Header Renderer
         JTableHeader header = table.getTableHeader();
         header.setPreferredSize(new Dimension(0, 32));
         header.setReorderingAllowed(false);
@@ -165,6 +169,24 @@ public class Buoi8 extends JFrame {
 
         table.setFillsViewportHeight(true);
 
+        // BẮT SỰ KIỆN CLICK CHỌN DÒNG TRÊN BẢNG ĐỂ ĐỔ DỮ LIỆU LÊN CÁC Ô NHẬP
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int row = table.getSelectedRow();
+                if (row >= 0) {
+                    txtMaSo.setText(tableModel.getValueAt(row, 1).toString());
+                    txtHoTen.setText(tableModel.getValueAt(row, 2).toString());
+                    String loai = tableModel.getValueAt(row, 3).toString();
+                    if (loai.contains("Công nghệ")) cbLoaiTS.setSelectedIndex(0);
+                    else cbLoaiTS.setSelectedIndex(1);
+                    
+                    txtDiem1.setText(tableModel.getValueAt(row, 4).toString().replace(",", "."));
+                    txtDiem2.setText(tableModel.getValueAt(row, 5).toString().replace(",", "."));
+                    txtDiem3.setText(tableModel.getValueAt(row, 6).toString().replace(",", "."));
+                }
+            }
+        });
+
         JScrollPane spTable = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         spTable.setPreferredSize(new Dimension(840, 220));
         spTable.setBorder(BorderFactory.createTitledBorder(
@@ -193,7 +215,9 @@ public class Buoi8 extends JFrame {
 
         // ===== GÁN SỰ KIỆN NÚT =====
         btnHoanThanh.addActionListener(e -> suKienHoanThanh());
-        btnTiep.addActionListener(e -> suKienTiep());
+        btnThem.addActionListener(e -> suKienThem());
+        btnSua.addActionListener(e -> suKienSua());
+        btnXoa.addActionListener(e -> suKienXoa());
 
         pack();
         setLocationRelativeTo(null);
@@ -204,7 +228,7 @@ public class Buoi8 extends JFrame {
     // XỬ LÝ SỰ KIỆN THAO TÁC
     // =====================================================================
 
-    // Khi bấm nút "Hoàn thành" (hoặc phím Enter): Kiểm tra và thêm thí sinh vào bảng
+    // 1. Nút "Hoàn thành" (Thêm thí sinh vào bảng)
     private void suKienHoanThanh() {
         String ms = txtMaSo.getText().trim();
         String ht = txtHoTen.getText().trim();
@@ -244,15 +268,93 @@ public class Buoi8 extends JFrame {
         tableModel.addRow(row);
     }
 
-    // Nút "Tiếp" (Xóa trắng ô nhập liệu để nhập thí sinh tiếp theo)
-    private void suKienTiep() {
+    // 2. Nút "Thêm" (Xóa trắng toàn bộ ô nhập liệu để làm mới nhập thí sinh mới)
+    private void suKienThem() {
         txtMaSo.setText("");
         txtHoTen.setText("");
         txtDiem1.setText("");
         txtDiem2.setText("");
         txtDiem3.setText("");
         cbLoaiTS.setSelectedIndex(0);
+        table.clearSelection();
         txtMaSo.requestFocus();
+    }
+
+    // 3. Nút "Sửa" (Cập nhật thông tin thí sinh đang được chọn trên bảng)
+    private void suKienSua() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 thí sinh trong bảng để sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String ms = txtMaSo.getText().trim();
+        String ht = txtHoTen.getText().trim();
+
+        if (ms.isEmpty() || ht.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Mã số và Họ tên không được phép rỗng!", "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double d1 = docDiem(txtDiem1, lblMon1.getText());
+        if (d1 < 0) return;
+
+        double d2 = docDiem(txtDiem2, lblMon2.getText());
+        if (d2 < 0) return;
+
+        double d3 = docDiem(txtDiem3, lblMon3.getText());
+        if (d3 < 0) return;
+
+        double tongDiem = d1 + d2 + d3;
+        String loaiTS = (String) cbLoaiTS.getSelectedItem();
+        String stt = tableModel.getValueAt(selectedRow, 0).toString();
+
+        String[] updatedRow = new String[]{
+                stt, ms, ht, loaiTS,
+                df.format(d1), df.format(d2), df.format(d3),
+                df.format(tongDiem)
+        };
+
+        // Cập nhật trong danh sách & bảng JTable
+        danhSachTS.set(selectedRow, updatedRow);
+        tableModel.setValueAt(ms, selectedRow, 1);
+        tableModel.setValueAt(ht, selectedRow, 2);
+        tableModel.setValueAt(loaiTS, selectedRow, 3);
+        tableModel.setValueAt(df.format(d1), selectedRow, 4);
+        tableModel.setValueAt(df.format(d2), selectedRow, 5);
+        tableModel.setValueAt(df.format(d3), selectedRow, 6);
+        tableModel.setValueAt(df.format(tongDiem), selectedRow, 7);
+
+        JOptionPane.showMessageDialog(this, "Đã cập nhật thông tin thí sinh " + ht + " thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // 4. Nút "Xóa" (Xóa thí sinh đang chọn khỏi bảng)
+    private void suKienXoa() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 thí sinh trong bảng để xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String ht = tableModel.getValueAt(selectedRow, 2).toString();
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc chắn muốn xóa thí sinh '" + ht + "' không?",
+                "Xác nhận xóa",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            danhSachTS.remove(selectedRow);
+            tableModel.removeRow(selectedRow);
+            
+            // Cập nhật lại STT
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                tableModel.setValueAt(String.valueOf(i + 1), i, 0);
+            }
+            
+            suKienThem(); // Xóa trắng các ô nhập
+            JOptionPane.showMessageDialog(this, "Đã xóa thí sinh thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     // =====================================================================
@@ -301,7 +403,7 @@ public class Buoi8 extends JFrame {
         b.setFont(new Font("Segoe UI", Font.BOLD, 13));
         b.setBackground(bg);
         b.setForeground(Color.WHITE);
-        b.setPreferredSize(new Dimension(125, 34));
+        b.setPreferredSize(new Dimension(115, 34));
         b.setFocusPainted(false);
         b.setBorderPainted(false);
         b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
